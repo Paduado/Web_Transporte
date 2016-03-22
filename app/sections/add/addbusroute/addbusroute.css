@@ -1,0 +1,17 @@
+.route-type-btn {
+    margin-left: 1em;
+    border: 0;
+    border-radius: 5px;
+    background: #cccccc;
+    padding: 6px 16px;
+    color: white;
+    font-size: .9em;
+    position: relative;
+}
+
+.route-type-btn:hover {
+    background: #bbb;
+}
+.route-type-btn.selected {
+    background: linear-gradient(to right ,#26a349,#016735);
+}

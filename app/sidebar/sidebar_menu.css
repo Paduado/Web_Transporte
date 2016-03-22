@@ -1,0 +1,139 @@
+.sidebar-container{
+    position : fixed;
+    top : 0;
+    left : 0;
+    background-color : #27A340;
+    width: 16em;
+    height: 100vh;
+    overflow-y: auto;
+}
+.sidebar-nav {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    width: 100%;
+}
+
+/********************************************************************************
+                                Sidebar options
+ ********************************************************************************/
+.sidebar-header{
+    display : block;
+    background-color : #27A340;
+    color : white;
+    text-decoration : none;
+    width : 100%;
+}
+
+.sidebar-header label{
+    color : white;
+    padding-top: 1em;
+}
+.sidebar-header img{
+    width:2em;
+    height:2em;
+    margin-left: 1em;
+}
+
+.sidebar-nav-header
+{
+    padding: 1em;
+}
+
+.sidebar-nav-header, .sidebar-nav-header *
+{
+    cursor: pointer;
+}
+
+
+/********************************************************************************
+                                Sidebar item
+ ********************************************************************************/
+.sidebar-item {
+    display : block;
+    background-color : #007136;
+    color : white;
+    text-decoration : none;
+    width : 100%;
+    padding: 1em;
+    position: relative;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.sidebar-item label{
+    color : white;
+    padding-left: 2em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    display : inline-block;
+    font-size:.8em;
+}
+.sidebar-item img {
+    width:1.5em;
+    height:1.5em;
+    margin-right: 1em;
+    display : inline-block;
+}
+
+.sidebar-item:hover {
+    background-color: #03592a;
+}
+
+.sidebar-nav p
+{
+    margin: 0;
+    display: inline-block;
+    width: calc(100% - 2.9em);
+    font-size: .9em;
+}
+
+/********************************************************************************
+                           Sidebar option selected
+ ********************************************************************************/
+
+.sidebar-item.selected{
+    background-color : #00491a !important;
+}
+
+.sidebar-item-selected label{
+    color : white;
+    padding-left: 2em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+
+}
+.sidebar-item-selected img {
+    width:1.5em;
+    height:1.5em;
+    margin-right: 1em;
+}
+
+.new-application img {
+    width:1.5em;
+    height:1.5em;
+    margin-right: 1em;
+}
+a:visited {
+    color: white;
+}
+
+a:hover {
+    color: white;
+}
+.no-height{
+    max-height: 0px;
+}
+
+
+.tree md-icon{
+    height: 1.3em;
+    width: 1.3em;
+    margin-right: 1em;
+    vertical-align: top;
+}
+
+.sidebar-nav-header md-icon{
+    height: .8em;
+    width: .8em;
+    margin-right: .5em;
+}
