@@ -11,7 +11,7 @@
         return {
             restrict: 'E',
             templateUrl: 'sidebar/sidebar-menu.html',
-            controller: ['$scope', '$location', function ($scope, $location)
+            controller: function ($scope, $location)
             {
                 $scope.tab = 1;
 
@@ -36,7 +36,19 @@
                 {
                     $(this).parent().children('ul.tree').toggle('blind');
                 });
-            }],
+
+                $scope.isUserLoged = function()
+                {
+                    return $location.path() != "/login";
+                };
+
+                $scope.logout = function()
+                {
+                    localStorage.clear();
+                    $location.path('/login')
+
+                };
+            },
             controllerAs: 'sidebarCtrl'
         };
     });

@@ -1,22 +1,49 @@
 'use strict';
-
+var webtransporte = "http://transportetuzobus.us-east-1.elasticbeanstalk.com";
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
     'ngRoute',
     'myApp.view1',
-    'myApp.addbusroute',
+    'myApp.login',
     'myApp.routes',
+    'myApp.addroute',
     'myApp.add_route_polyline',
-    'myApp.add_stop',
+    'myApp.site',
+    'myApp.addsite',
+    'myApp.private',
+    'myApp.addprivate',
+    'myApp.taxi',
+    'myApp.users',
+    'myApp.password',
     'sidebarMenu',
     'ngMaterial',
     'md.data.table'
-]).config([
-    '$routeProvider', function ($routeProvider)
+]).config(function ($routeProvider)
     {
-        $routeProvider.otherwise({redirectTo: '/routes'});
+        $routeProvider.otherwise({redirectTo: '/route'});
+
     }
-]).config(function ($mdThemingProvider)
+).run(function ($rootScope, $location)
+{
+
+    $rootScope.$on("$routeChangeStart", function (event, next)
+    {
+        if(next.$$route != undefined)
+        {
+            var path = next.$$route.originalPath;
+            if (localStorage.getItem('username') != null)
+            {
+                if(path == "/login")
+                    $location.path("/route");
+            }
+            else
+            {
+                if (path != "/login")
+                    $location.path("/login");
+            }
+        }
+    });
+}).config(function ($mdThemingProvider)
 {
     var customPrimary = {
         '50': '#6ddc84',
@@ -56,5 +83,12 @@ angular.module('myApp', [
 
     $mdThemingProvider.definePalette('customAccent', customAccent);
 
-    $mdThemingProvider.theme('default').primaryPalette('customPrimary').accentPalette('customAccent');
+    $mdThemingProvider.theme('default').primaryPalette('customPrimary').accentPalette('customAccent').warnPalette('red');
+}).config(function($httpProvider)
+{
+    $httpProvider.defaults.useXDomain = true;
+    $httpProvider.defaults.withCredentials = true;
+    delete $httpProvider.defaults.headers.common["X-Requested-With"];
+    $httpProvider.defaults.headers.common["Accept"] = "application/json";
+    $httpProvider.defaults.headers.common["Content-Type"] = "application/json";
 });

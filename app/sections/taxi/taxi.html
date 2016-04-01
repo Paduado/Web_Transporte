@@ -1,0 +1,26 @@
+<br>
+<br>
+<br>
+<br>
+<label style="margin-left: 15%" class="card-header">ASIGNAR TARIFA</label>
+<br>
+<br>
+<table class="fees-table">
+    <thead>
+    <tr>
+        <td>A partir de</td>
+        <td>Tarifa</td>
+    </tr>
+    </thead>
+    <tbody style="overflow: auto;height: 300px !important;">
+    <tr ng-repeat="fee in fees " ng-style="$even?{'background-color':'#f2f4f4'}:''" ng-click="editFee({index:$index,fee:fee})">
+        <td>{{fee.km+" km"}}</td>
+        <td>{{fee.amount | currency}}</td>
+    </tr>
+    </tbody>
+</table>
+<div layout="row" layout-align="end">
+    <md-button ng-click="openFeesDialog()" style="margin-right: 15%" class="md-fab md-mini md-primary">
+        <md-icon md-svg-src="resources/icons/ic_add.svg"></md-icon>
+    </md-button>
+</div>

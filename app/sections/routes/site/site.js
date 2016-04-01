@@ -1,18 +1,17 @@
-'use strict';
-
-angular.module('myApp.routes', ['ngRoute']).config([
+angular.module('myApp.site', ['ngRoute']).config([
     '$routeProvider', function ($routeProvider)
     {
-        $routeProvider.when('/routes', {
-            templateUrl: 'sections/routes/routes.html', controller: 'routesCtrl'
+        $routeProvider.when('/site', {
+            templateUrl: 'sections/routes/site/site.html',
+            controller: 'siteCtrl'
         });
     }
-]).controller('routesCtrl', function ($scope,$location)
+]).controller('siteCtrl', function ($scope)
 {
     $scope.routes = [];
 
 
-    for(var i =0;i<51;i++)
+    for(var i =0;i<1000;i++)
     {
         $scope.routes.push({
             key: Math.floor(Math.random() * (3 - 1 + 1)) + 1,
@@ -26,11 +25,16 @@ angular.module('myApp.routes', ['ngRoute']).config([
     $scope.routes.push({
         key: 1,
         schedule: "11:1"+i,
-        link: "url.com",
+        link: "padua.com",
         status: 1,
         type:3
     });
 
+
+
+
+
+//------TABLE--------------------------------------------
     $scope.limit = 5;
     $scope.page = 1;
     $scope.pages = [];
@@ -40,7 +44,6 @@ angular.module('myApp.routes', ['ngRoute']).config([
         if($scope.page > 1)
         {
             $scope.page--;
-            //$scope.$digest();
         }
     };
     $scope.nextPage = function()
@@ -48,18 +51,13 @@ angular.module('myApp.routes', ['ngRoute']).config([
         if(($scope.page * $scope.limit)<$scope.filtered.length)
         {
             $scope.page++;
-            //$scope.$digest();
         }
     };
 
     $scope.onFilterChange = function()
     {
         $scope.page = 1;
-
-
     };
-
-
     $scope.getPages = function()
     {
         var count = $scope.filtered.length;
@@ -76,15 +74,10 @@ angular.module('myApp.routes', ['ngRoute']).config([
         return $scope.pages;
     };
 
-
-
-
     $scope.predicate = '';
     $scope.reverse = false;
     $scope.order = function(predicate)
     {
-
-
         if($scope.predicate == predicate && $scope.reverse)
         {
             $scope.predicate = '';
@@ -99,19 +92,7 @@ angular.module('myApp.routes', ['ngRoute']).config([
             $scope.predicate = predicate;
             $scope.reverse = false;
         }
-
-
     };
 
 
-    $scope.isTypeChecked = function(route)
-    {
-        return ($scope.checkType1? route.key==1 : false) || ($scope.checkType2? route.key==2:false) || ($scope.checkType3? route.key==3:false);
-    };
-
-
-    $scope.go = function(path)
-    {
-        $location.path(path);
-    };
 });

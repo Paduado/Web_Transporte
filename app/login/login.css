@@ -1,0 +1,12 @@
+.login-background{
+    background: linear-gradient(to left top, #007136 , #27A340) ;
+}
+
+.login-input{
+    border:0;
+    border-radius: 4px;
+    margin-bottom: 1em;
+    width: 300px;
+    z-index: 1;
+    padding: 8px;
+}

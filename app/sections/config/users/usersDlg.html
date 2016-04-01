@@ -1,0 +1,48 @@
+<md-dialog>
+    <md-dialog-content class="md-dialog-content">
+        <div layout="column" style="width: 400px">
+            <h2>{{index==undefined?"Crear usuario":"Editar Usuario"}}</h2>
+
+            <md-input-container style="margin: 5px">
+                <label>Usuario</label>
+                <input  ng-model="user.username">
+            </md-input-container>
+
+            <md-input-container style="margin: 5px">
+                <label>Nombre</label>
+                <input  ng-model="user.name">
+            </md-input-container>
+
+            <md-input-container style="margin: 5px">
+                <label>Correo</label>
+                <input  ng-model="user.email">
+            </md-input-container>
+
+            <md-input-container ng-show="index == undefined" style="margin: 5px">
+                <label>Contraseña</label>
+                <input  ng-model="user.password">
+            </md-input-container>
+
+            <md-input-container style="margin: 5px">
+                <label>Tipo</label>
+                <md-select ng-model="user.type">
+                    <md-option value="10">10</md-option>
+                    <md-option value="20">20</md-option>
+                    <md-option value="30">30</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <md-button ng-show="index != undefined" class="md-warn" ng-click="cancel(index)">
+            Eliminar
+        </md-button>
+        <span flex></span>
+        <md-button class="md-primary" ng-click="cancel()">
+            Cancelar
+        </md-button>
+        <md-button ng-disabled="user.username == '' || user.name == '' || user.email == '' || user.type == '' || user.password == ''" class="md-primary" ng-click="save()">
+            Guardar
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

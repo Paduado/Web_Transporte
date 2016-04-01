@@ -1,0 +1,44 @@
+<md-dialog id="map-container" style="width: 100%;height: 100%">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Asignar Ruta</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="resources/icons/ic_close.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <div layout="row" style="height: 90%; position: relative" id="map-dialog-body">
+        <div layout="column" flex="100" style="height: 100%" id="add-route-map"></div>
+        <div id="map-cover" ng-click="cancelInfo()"></div>
+        <div layout="column" id="info_container" class="transition" style="height: 100%;width: 100%;max-width:0;background-color: #fff;overflow: hidden;display:block; z-index: 1" class="transition">
+            <div style="padding: 1em;display: block">
+                <md-checkbox class="md-primary" ng-model="isStop" aria-label="Checkbox 1">
+                    <label style="white-space: nowrap">¿Es parada?</label>
+                </md-checkbox>
+                <div class="transition" style="overflow:hidden"
+                     ng-style="isStop?{'max-height':'100px'}:{'max-height':'0'}">
+                    <md-input-container>
+                        <label>Nombre</label>
+                        <input type="text" ng-init="stopName = ''" ng-model="stopName">
+                    </md-input-container>
+                </div>
+                <div layout="row">
+                    <md-button class="md-primary" ng-click="cancelInfo()">Cancelar</md-button>
+                    <md-button class="md-primary" ng-disabled="isStop && stopName == ''" ng-click="acceptInfo()">Aceptar</md-button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <md-dialog-actions style="height: 10%;position: absolute;right: 0;bottom: 0;text-align: end;">
+        <md-button style="margin: 1em" class="md-primary md-raised" ng-click="cancel()">
+            Cancelar
+        </md-button>
+        <md-button style="margin: 1em" class="md-primary md-raised" ng-click="accept()">
+            Guardar
+        </md-button>
+    </md-dialog-actions>
+
+
+</md-dialog>

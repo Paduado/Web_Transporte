@@ -1,0 +1,177 @@
+<div layout="row" layout-align="end">
+    <div layout="column">
+        <md-button class="md-raised gray-btn">Cancelar</md-button>
+    </div>
+    <div layout="column" flex-offset="5">
+        <md-button class="md-raised gray-btn">Guardar</md-button>
+    </div>
+</div>
+<div layout="row" ng-init="route.concession_route.route_typeId = 1">
+    <button md-ink-ripple ng-click="route.concession_route.route_typeId = 1" ng-class="route.concession_route.route_typeId==1? 'selected':''" class="route-type-btn md-whiteframe-2dp">
+        <md-icon style="margin-right:.5em" md-svg-src="resources/icons/ic_bus.svg"></md-icon>
+        Autobús
+    </button>
+    <button md-ink-ripple ng-click="route.concession_route.route_typeId = 2" ng-class="route.concession_route.route_typeId==2? 'selected':''" class="route-type-btn md-whiteframe-2dp">
+        <md-icon style="margin-right:.5em" md-svg-src="resources/icons/ic_tuzobus_alimentadora.svg"></md-icon>
+        Colector
+    </button>
+    <button md-ink-ripple ng-click="route.concession_route.route_typeId = 3" ng-class="route.concession_route.route_typeId==3? 'selected':''" class="route-type-btn md-whiteframe-2dp">
+        <md-icon style="margin-right:.5em" md-svg-src="resources/icons/ic_tuzobus_truncal.svg"></md-icon>
+        Tuzobús
+    </button>
+</div>
+<br>
+<br>
+<label class="card-header">DATOS DE IDENTIFICACION DE RUTA</label>
+<md-card>
+    <md-input-container>
+        <label>Clave mnemotécnica</label>
+        <input type="text" ng-model="route.key">
+    </md-input-container>
+    <md-input-container>
+        <label>Itinerario</label>
+        <input type="text" ng-model="route.itinerary">
+
+    </md-input-container>
+    <md-input-container>
+        <label>Ubicación</label>
+        <input type="text" ng-model="route.location">
+
+    </md-input-container>
+    <md-input-container>
+        <label>Municipio</label>
+        <md-select ng-model="route.municipalityId">
+            <md-option value="Jalisco">Jalisco</md-option>
+            <md-option value="Pachuca">Pachuca</md-option>
+            <md-option value="DF">DF</md-option>
+        </md-select>
+        <div class="md-errors-spacer"></div>
+    </md-input-container>
+
+</md-card>
+<br>
+<br>
+<label class="card-header">CARACTERÍSTICAS DE LA RUTA</label>
+<md-card>
+    <div layout="row">
+        <div layout="column">
+            <md-input-container>
+                <label>Longitud</label>
+                <input type="text" ng-model="route.lenght">
+            </md-input-container>
+
+            <label style="margin-bottom: .5em">Terreno:</label>
+            <md-radio-group ng-model="route.ground">
+                <md-radio-button value="Pavimento" class="md-primary">Pavimento</md-radio-button>
+                <md-radio-button value="Terracería" class="md-primary"> Terracería</md-radio-button>
+            </md-radio-group>
+
+        </div>
+        <div layout="column" flex-offset="25">
+            <md-input-container>
+                <label>Tiempo de recorrido</label>
+                <input type="text" ng-model="route.duration">
+            </md-input-container>
+            <label style="margin-bottom: .5em">Tramo:</label>
+            <md-radio-group ng-model="route.road">
+                <md-radio-button value="Estatal" class="md-primary">Estatal</md-radio-button>
+                <md-radio-button value="Federal" class="md-primary"> Federal</md-radio-button>
+            </md-radio-group>
+
+        </div>
+    </div>
+</md-card>
+<br>
+<br>
+<label class="card-header">VEHÍCULO</label>
+<md-card>
+    <md-input-container>
+        <label>Tipo de Vehículo</label>
+        <md-select ng-model="route.vehicle_type">
+            <md-option value="Jalisco">Camion</md-option>
+            <md-option value="Pachuca">Troca</md-option>
+            <md-option value="DF">Taxi</md-option>
+        </md-select>
+        <div class="md-errors-spacer"></div>
+    </md-input-container>
+
+    <md-input-container>
+        <label>Antiguedad del Vehiculo Permitida</label>
+        <input type="text" ng-model="route.vehicle_antiquity">
+    </md-input-container>
+</md-card>
+<br>
+<br>
+<label class="card-header">ASIGNAR RUTA Y PARADAS</label>
+<md-card>
+    <md-button ng-click="addPolyline()" style="width: 200px" class="md-raised md-primary">Asignar Ruta</md-button>
+    <md-input-container>
+        <label>Hipervínculo Google Maps</label>
+        <input type="text" ng-model="route.link">
+    </md-input-container>
+    <md-input-container>
+        <label>Dimensionamiento</label>
+        <input type="text" ng-model="route.sizing">
+    </md-input-container>
+</md-card>
+<br>
+<br>
+<label class="card-header">TIEMPOS</label>
+<md-card>
+    <div layout="row">
+        <div layout="column">
+            <label>Horario:</label>
+            <div layout="row" layout-align="center center">
+                <md-input-container style="width: 100px">
+                    <label>Inicio</label>
+                    <input type="text" ng-model="route.schedule">
+                </md-input-container>
+                <label style="height: 3em;margin: 0 1em">-</label>
+                <md-input-container style="width: 100px">
+                    <label>Fin</label>
+                    <input type="text" ng-model="route.schedule">
+                </md-input-container>
+            </div>
+        </div>
+        <div layout="column" flex-offset="30">
+            <md-input-container style="margin-top: -.5em">
+                <label>Frecuencia</label>
+                <input type="text" ng-model="route.frequency">
+            </md-input-container>
+        </div>
+    </div>
+</md-card>
+<br>
+<br>
+<label class="card-header">TARIFAS</label>
+<md-card>
+    <md-input-container>
+        <label>Tarifa Máxima</label>
+        <input type="text" ng-model="route.route.min_rate">
+    </md-input-container>
+    <md-input-container>
+        <label>Tarifa Mínima</label>
+        <input type="text" ng-model="route.route.max_rate">
+    </md-input-container>
+</md-card>
+<br>
+<br>
+<label class="card-header">IMAGEN CORPORATIVA</label>
+<md-card>
+    <div layout="row">
+        <input style="display: none" id="file" type="file">
+        <md-button style="width: 200px;height: 30px" ng-click="selectFile()" class="md-raised md-primary">Examinar</md-button>
+        <span flex></span>
+        <img id="preview" style="width:200px; height:200px"/>
+    </div>
+</md-card>
+
+<br>
+<br>
+<label class="card-header">OBSERVACIONES</label>
+<md-card>
+    <md-input-container>
+        <label>Observaciones</label>
+        <input type="text" ng-model="route.notes">
+    </md-input-container>
+</md-card>

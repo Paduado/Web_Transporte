@@ -1,48 +1,53 @@
-<div class="sidebar-container">
-	<ul class="sidebar-nav">
-		<li  class="sidebar-header" style="display:inline-block;" >
-			<div  class="sidebar-nav-header tree-toggler" md-ink-ripple="#FFFFFF" style="position: relative">
-				<md-icon md-svg-src="resources/icons/ic_arrow_down.svg"></md-icon>
-				<label >Rutas</label>
-			</div>
-			<md-divider></md-divider>
-			<ul class="sidebar-nav tree transition">
-				<li  ng-click="setTab(1); go('/routes')"  class="sidebar-item transition" ng-class="isTabSelected(1)?'selected':''" md-ink-ripple="#FFFFFF">
-					<md-icon md-svg-src="resources/icons/ic_bus.svg"></md-icon>
-					<p>Rutas</p>
-				</li>
-				<li ng-click="setTab(2); go('/')" class="sidebar-item transition" ng-class="isTabSelected(2)?'selected':''" md-ink-ripple="#FFFFFF" >
-					<md-icon md-svg-src="resources/icons/ic_tuzobus_truncal.svg"></md-icon>
-					<p>Privado</p>
-				</li>
-				<li ng-click="setTab(3); go('/applications/search')" class="sidebar-item transition" ng-class="isTabSelected(3)?'selected':''" md-ink-ripple="#FFFFFF">
-					<md-icon md-svg-src="resources/icons/ic_tuzobus_alimentadora.svg"></md-icon>
-					<p>por revisar</p>
-				</li>
-			</ul>
-		</li>
-		<li  class="sidebar-header" style="display:inline-block;" >
-			<div class="sidebar-nav-header tree-toggler" md-ink-ripple="#FFFFFF" style="position: relative">
-				<label >Taxi</label>
-			</div>
-			<md-divider></md-divider>
-			<ul class="sidebar-nav tree transition">
-			</ul>
-		</li>
+<md-sidenav class="side-bar" md-whiteframe="3" md-component-id="left" md-is-locked-open="isUserLoged()">
+    <ul class="sidebar-nav">
+        <li class="sidebar-header" style="display:inline-block;">
+            <div class="sidebar-nav-header tree-toggler" md-ink-ripple="#FFFFFF" style="position: relative">
+                <md-icon md-svg-src="resources/icons/ic_arrow_down.svg"></md-icon>
+                <label>Administracion de Rutas</label>
+            </div>
+            <md-divider></md-divider>
+            <ul class="sidebar-nav tree transition">
+                <li ng-click="setTab(1); go('/route')" class="sidebar-item transition" ng-class="isTabSelected(1)?'selected':''" md-ink-ripple="#FFFFFF">
+                    <p>Ruta</p>
+                </li>
+                <li ng-click="setTab(2); go('/site')" class="sidebar-item transition" ng-class="isTabSelected(2)?'selected':''" md-ink-ripple="#FFFFFF">
+                    <p>Sitio</p>
+                </li>
+                <li ng-click="setTab(3); go('/private')" class="sidebar-item transition" ng-class="isTabSelected(3)?'selected':''" md-ink-ripple="#FFFFFF">
+                    <p>Privado</p>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-header" style="display:inline-block;">
+            <div class="sidebar-nav-header tree-toggler" md-ink-ripple="#FFFFFF" style="position: relative">
+                <md-icon md-svg-src="resources/icons/ic_arrow_down.svg"></md-icon>
+                <label>Taxi</label>
+            </div>
+            <md-divider></md-divider>
+            <ul class="sidebar-nav tree transition" style="display: none">
+                <li ng-click="setTab(4); go('/taxi')" class="sidebar-item transition" ng-class="isTabSelected(4)?'selected':''" md-ink-ripple="#FFFFFF">
+                    <p>Tarifas</p>
+                </li>
+            </ul>
+        </li>
 
-		<li  class="sidebar-header" style="display:inline-block;" >
-			<div class="sidebar-nav-header tree-toggler" md-ink-ripple="#FFFFFF" style="position: relative">
-				<label >Configuración</label>
-			</div>
-			<md-divider></md-divider>
-			<ul class="sidebar-nav tree transition">
-				<li  ng-click="setTab(7); go('/applications/new')"  class="sidebar-item transition" ng-class="isTabSelected(7)?'selected':''" md-ink-ripple="#FFFFFF">
-					<p >Usuarios</p>
-				</li>
-				<li ng-click="setTab(8); go('/applications/new')" class="sidebar-item transition" ng-class="isTabSelected(8)?'selected':''" md-ink-ripple="#FFFFFF" >
-					<p>Administrar</p>
-				</li>
-			</ul>
-		</li>
-	</ul>
-</div>
+        <li class="sidebar-header" style="display:inline-block;">
+            <div class="sidebar-nav-header tree-toggler" md-ink-ripple="#FFFFFF" style="position: relative">
+                <md-icon md-svg-src="resources/icons/ic_arrow_down.svg"></md-icon>
+                <label>Configuración</label>
+            </div>
+            <md-divider></md-divider>
+            <ul class="sidebar-nav tree transition" style="display: none">
+                <li ng-click="setTab(7); go('/users')" class="sidebar-item transition" ng-class="isTabSelected(7)?'selected':''" md-ink-ripple="#FFFFFF">
+                    <p>Usuarios</p>
+                </li>
+                <li ng-click="setTab(8); go('/password')" class="sidebar-item transition" ng-class="isTabSelected(8)?'selected':''" md-ink-ripple="#FFFFFF">
+                    <p>Administrar</p>
+                </li>
+                <li ng-click="setTab(1); logout()" class="sidebar-item transition" ng-class="isTabSelected(9)?'selected':''" md-ink-ripple="#FFFFFF">
+                    <p>Cerrar Sesión</p>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</md-sidenav>

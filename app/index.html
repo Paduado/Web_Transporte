@@ -13,10 +13,17 @@
     <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
     <link rel="stylesheet" href="app.css">
     <link rel="stylesheet" href="sidebar/sidebar_menu.css">
-    <link rel="stylesheet" href="sections/add/addbusroute/addbusroute.css">
-    <link rel="stylesheet" href="sections/add_route_polyline/add_route_polyline.css">
-    <link rel="stylesheet" href="sections/add_route_polyline/add_stop/add_stop.css">
-    <link rel="stylesheet" href="sections/routes/routes.css">
+    <link rel="stylesheet" href="login/login.css">
+    <link rel="stylesheet" href="sections/routes/route/route.css">
+    <link rel="stylesheet" href="sections/routes/route/addroute/addroute.css">
+    <link rel="stylesheet" href="sections/routes/route/addroute/add_route_polyline/add_route_polyline.css">
+    <link rel="stylesheet" href="sections/routes/site/site.css">
+    <link rel="stylesheet" href="sections/routes/site/addsite/addsite.css">
+    <link rel="stylesheet" href="sections/routes/private/private.css">
+    <link rel="stylesheet" href="sections/routes/private/addprivate/addprivate.css">
+    <link rel="stylesheet" href="sections/taxi/taxi.css">
+    <link rel="stylesheet" href="sections/config/users/users.css">
+    <link rel="stylesheet" href="sections/config/password/password.css">
     <link rel="stylesheet" href="../node_modules/jqueryui/jquery-ui.css">
     <link rel="stylesheet" href="../node_modules/angular-material/angular-material.css">
     <link rel="stylesheet" href="../node_modules/angular-material-data-table/dist/md-data-table.css">
@@ -30,9 +37,11 @@
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
-  <sidebar-menu></sidebar-menu>
 
-  <div class="main_container" ng-view></div>
+  <section layout="row" style="height:100%;overflow: hidden">
+      <sidebar-menu style="height: 100%" ></sidebar-menu>
+      <div class="main_container" ng-view ></div>
+  </section>
 
 
   <!-- In production use:
@@ -56,10 +65,17 @@
   <script src="../node_modules/angular-material-data-table/dist/md-data-table.js"></script>
   <script src="app.js"></script>
   <script src="view1/view1.js"></script>
-  <script src="sections/add/addbusroute/addbusroute.js"></script>
-  <script src="sections/add_route_polyline/add_route_polyline.js"></script>
-  <script src="sections/add_route_polyline/add_stop/add_stop.js"></script>
-  <script src="sections/routes/routes.js"></script>
+  <script src="login/login.js"></script>
+  <script src="sections/routes/route/route.js"></script>
+  <script src="sections/routes/route/addroute/addroute.js"></script>
+  <script src="sections/routes/route/addroute/add_route_polyline/add_route_polyline.js"></script>
+  <script src="sections/routes/site/site.js"></script>
+  <script src="sections/routes/site/addsite/addsite.js"></script>
+  <script src="sections/routes/private/private.js"></script>
+  <script src="sections/routes/private/addprivate/addprivate.js"></script>
+  <script src="sections/taxi/taxi.js"></script>
+  <script src="sections/config/users/users.js"></script>
+  <script src="sections/config/password/password.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKNkyMblPeNHLvHwDyGj9hRmPAnxuAuKA"></script>
 </body>
 </html>

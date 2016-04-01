@@ -1,0 +1,25 @@
+<md-dialog>
+    <md-dialog-content class="md-dialog-content">
+        <h2>{{index == undefined?"Agregar Tarifa":"Editar Tarifa"}}</h2>
+        <md-input-container>
+            <label>A partir del km</label>
+            <input  ng-model="km">
+        </md-input-container>
+        <md-input-container>
+            <label>Tarifa</label>
+            <input  ng-model="amount">
+        </md-input-container>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <md-button ng-show="index != undefined" class="md-warn" ng-click="cancel(index)">
+            Eliminar
+        </md-button>
+        <span flex></span>
+        <md-button class="md-primary" ng-click="cancel()">
+            Cancelar
+        </md-button>
+        <md-button ng-disabled="km == '' || amount == ''" class="md-primary" ng-click="save()">
+            Guardar
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

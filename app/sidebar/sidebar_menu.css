@@ -1,11 +1,7 @@
-.sidebar-container{
-    position : fixed;
-    top : 0;
-    left : 0;
+md-sidenav{
     background-color : #27A340;
-    width: 16em;
-    height: 100vh;
-    overflow-y: auto;
+    height: 100%;
+    width: 250px !important;
 }
 .sidebar-nav {
     padding-left: 0;
