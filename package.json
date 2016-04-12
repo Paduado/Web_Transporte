@@ -31,13 +31,13 @@
     "update-index-async": "node -e \"require('shelljs/global'); sed('-i', /\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/, '//@@NG_LOADER_START@@\\n' + sed(/sourceMappingURL=angular-loader.min.js.map/,'sourceMappingURL=bower_components/angular-loader/angular-loader.min.js.map','app/bower_components/angular-loader/angular-loader.min.js') + '\\n//@@NG_LOADER_END@@', 'app/index-async.html');\""
   },
   "dependencies": {
-    "angular": "^1.5.1",
-    "angular-animate": "^1.5.0",
-    "angular-aria": "^1.5.0",
-    "angular-material": "^1.0.6",
-    "angular-material-data-table": "^0.9.12",
-    "angular-messages": "^1.5.0",
-    "jquery": "^2.2.1",
+    "angular": "^1.5.3",
+    "angular-animate": "^1.5.3",
+    "angular-aria": "^1.5.3",
+    "angular-material": "^1.0.7",
+    "angular-material-data-table": "^0.9.15",
+    "angular-messages": "^1.5.3",
+    "jquery": "^2.2.3",
     "jqueryui": "^1.11.1"
   }
 }

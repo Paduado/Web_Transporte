@@ -8,11 +8,15 @@ angular.module('myApp.login', ['ngRoute']).config([
     }
 ]).controller('loginCtrl', function ($scope, $location, $mdDialog)
 {
-    $('.main_container').addClass('login-background');
+    //$('.main_container').addClass('login-background');
+
+
+
+    $scope.loading = false;
 
     $scope.login = function ()
     {
-
+        $scope.loading = true;
         $.post(webtransporte + '/admin/login',
             {
                 username: $scope.user,
@@ -20,6 +24,7 @@ angular.module('myApp.login', ['ngRoute']).config([
             },
             function (response)
             {
+                $scope.loading = false;
                 if (response.response_code == 200)
                 {
                     $scope.$apply(function ()
@@ -30,7 +35,7 @@ angular.module('myApp.login', ['ngRoute']).config([
                         localStorage.setItem('email', response.user.email);
                         localStorage.setItem('level', response.user.level);
 
-                        $('.main_container').removeClass('login-background');
+                        //$('.main_container').removeClass('login-background');
 
                         $location.path('/route');
                     });
@@ -50,6 +55,7 @@ angular.module('myApp.login', ['ngRoute']).config([
             }, 'json')
             .fail(function ()
             {
+                $scope.loading = false;
                 $mdDialog.show(
                     $mdDialog.alert()
                         .clickOutsideToClose(true)

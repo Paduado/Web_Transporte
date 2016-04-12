@@ -3,12 +3,24 @@
 angular.module('myApp.routes', ['ngRoute']).config([
     '$routeProvider', function ($routeProvider)
     {
-        $routeProvider.when('/route', {
-            templateUrl: 'sections/routes/route/route.html', controller: 'routesCtrl'
+        $routeProvider.when('/routes/:route_type', {
+            templateUrl: 'sections/routes/routes.html', controller: 'routesCtrl'
         });
     }
-]).controller('routesCtrl', function ($scope, $mdDialog)
+]).controller('routesCtrl', function ($scope, $mdDialog, $routeParams)
 {
+    switch ($routeParams.route_type)
+    {
+        case "1":
+            $scope.routeType = "site";
+            break;
+        case "2":
+            $scope.routeType = "route";
+            break;
+        case "3":
+            $scope.routeType = "private";
+            break;
+    }
     $scope.routes = [];
 
     function getRoutes()
@@ -16,7 +28,7 @@ angular.module('myApp.routes', ['ngRoute']).config([
         $.post(webtransporte + '/admin/get/routes',
             {
                 public_key: localStorage.getItem('public_key'),
-                route_type:2
+                route_type: $routeParams.route_type
             },
             function (response)
             {
@@ -123,13 +135,13 @@ angular.module('myApp.routes', ['ngRoute']).config([
     };
 
 
-    $scope.enableRoute = function(key,enable)
+    $scope.enableRoute = function (key, enable)
     {
         $.post(webtransporte + '/admin/enable/route',
             {
                 public_key: localStorage.getItem('public_key'),
-                route_key:key,
-                enable:enable?1:0
+                route_key: key,
+                enable: enable ? 1 : 0
             },
             function (response)
             {
@@ -164,7 +176,10 @@ angular.module('myApp.routes', ['ngRoute']).config([
 
     $scope.isTypeChecked = function (route)
     {
-        return ($scope.checkType1 ? route.type == 1 : false) || ($scope.checkType2 ? route.type == 2 : false) || ($scope.checkType3 ? route.type == 3 : false);
+        return $scope.routeType != 'route'
+            || ($scope.checkType1 ? route.concession_route.route_typeId == 1 : false)
+            || ($scope.checkType2 ? route.concession_route.route_typeId == 2 : false)
+            || ($scope.checkType3 ? route.concession_route.route_typeId == 3 : false);
     };
 
 

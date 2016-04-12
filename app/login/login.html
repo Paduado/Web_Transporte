@@ -1,15 +1,19 @@
-
-<div>
+<div class="login-background">
     <div layout="row" layout-align="center" style="margin-top: 30px;">
         <md-icon style="width: 300px;height: 300px;padding-right: 20px" md-svg-src="resources/icons/main_icon.svg"></md-icon>
     </div>
     <div layout="row" layout-align="center" style="margin-top: 40px">
 
         <div layout="column">
-            <input ng-model="user"  placeholder="Usuario" class="login-input">
+            <input ng-model="user" placeholder="Usuario" class="login-input">
             <input ng-model="password" type="password" placeholder="Contraseña" class="login-input">
             <div layout="row" layout-align="center">
-                <md-button ng-click="login()" ng-disabled="email == '' || password == ''" style="z-index: 1;width: 150px" class="md-raised md-primary">iniciar sesión</md-button>
+                <md-button ng-click="login()" ng-disabled="email == '' || password == ''" style="z-index: 1;width: 150px" class="md-raised md-primary">
+                    <div ng-if="loading" layout="row" layout-align="center">
+                        <md-progress-circular class="md-accent" md-mode="indeterminate"></md-progress-circular>
+                    </div>
+                    <label ng-if="!loading">Iniciar Sesión</label>
+                </md-button>
             </div>
 
         </div>

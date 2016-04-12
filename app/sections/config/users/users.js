@@ -65,7 +65,7 @@ angular.module('myApp.users', ['ngRoute']).config([
             else
             {
                 data.user.public_key = localStorage.getItem('publick_key');
-                $.post(webtransporte + '/admin/new/users',data.user,
+                $.post(webtransporte + '/admin/new/user',data.user,
                     function (response)
                     {
                         if (response.response_code == 200)
@@ -130,10 +130,10 @@ angular.module('myApp.users', ['ngRoute']).config([
         if (data != undefined)
         {
             $scope.user = {
-                id: data.user.id,
+                username: data.user.username,
                 name: data.user.name,
-                mail: data.user.mail,
-                type: data.user.type,
+                email: data.user.email,
+                level: data.user.level,
                 password: data.user.password
             };
             $scope.index = data.index;

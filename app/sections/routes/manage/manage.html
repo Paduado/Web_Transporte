@@ -1,6 +1,6 @@
 <div layout="row" layout-align="end" style=" width: 100%; height: 90px;padding-right: 2em;padding-top: 2em">
     <div layout="column">
-        <md-button ng-click="go('/route')" class="md-raised gray-btn">Cancelar</md-button>
+        <md-button ng-click="go('/routes/'+route.type)" class="md-raised gray-btn">Cancelar</md-button>
     </div>
     <div layout="column" flex-offset="5">
         <md-button ng-click="saveRoute()" ng-disabled="routeForm.$invalid" class="md-raised gray-btn">Guardar</md-button>
@@ -138,6 +138,12 @@
                             <div class="hint-error" ng-style="routeForm.atractor.$invalid && routeForm.atractor.$touched?{'color':'red'}:''" >Obligatorio, max 100 caracteres</div>
                         </md-input-container>
 
+                        <md-input-container>
+                            <label>Concesiones</label>
+                            <input type="text" ng-model="route.private_route.concessions" name="concessions" required maxlength="100">
+                            <div class="hint-error" ng-style="routeForm.concessions.$invalid && routeForm.concessions.$touched?{'color':'red'}:''" >Obligatorio, max 100 caracteres</div>
+                        </md-input-container>
+
 
 
                     </div>
@@ -145,8 +151,8 @@
                     <div layout="column" flex="45" flex-offset="10">
 
                         <!--<md-input-container>-->
-                            <!--<label>Concesiones</label>-->
-                            <!--<input type="text" ng-model="route.private_route.concessions">-->
+                        <!--<label>Concesiones</label>-->
+                        <!--<input type="text" ng-model="route.private_route.concessions">-->
                         <!--</md-input-container>-->
 
                         <md-input-container>
@@ -170,7 +176,7 @@
                 </div>
                 <br>
                 <label>Unidades óptimas para el servicio</label>
-                <md-chips ng-init="route.private_route.service_units = []" md-require-match="true" ng-model="route.private_route.service_units" md-on-add="chipsChanged()">
+                <md-chips ng-init="service_units = []" md-require-match="true" ng-model="service_units" md-on-add="chipsChanged()">
                     <md-autocomplete
                             md-items="vehicle in vehicles"
                             md-item-text="vehicle.name"
@@ -196,20 +202,20 @@
 
                         <md-input-container>
                             <label>Centro Atractor</label>
-                            <input type="text" ng-model="route.site.atractor">
-                            <div class="hint-error" ng-style="routeForm.generator.$invalid && routeForm.generator.$touched?{'color':'red'}:''" >Obligatorio, max 100 caracteres</div>
+                            <input type="text" ng-model="route.site.atractor" name="atractor" required maxlength="100">
+                            <div class="hint-error" ng-style="routeForm.atractor.$invalid && routeForm.atractor.$touched?{'color':'red'}:''" >Obligatorio, max 100 caracteres</div>
                         </md-input-container>
                     </div>
                     <div layout="column" flex="45" flex-offset="10">
                         <md-input-container>
                             <label>Usuarios Beneficiados</label>
-                            <input type="text" ng-model="route.site.users_benefit">
-                            <div class="hint-error" ng-style="routeForm.generator.$invalid && routeForm.generator.$touched?{'color':'red'}:''" >Obligatorio, max 100 caracteres</div>
+                            <input type="text" ng-model="route.site.users_benefit" required maxlength="100" name="users">
+                            <div class="hint-error" ng-style="routeForm.users.$invalid && routeForm.users.$touched?{'color':'red'}:''" >Obligatorio, max 100 caracteres</div>
                         </md-input-container>
                         <md-input-container>
                             <label>Irregulares</label>
-                            <input type="text" ng-model="route.site.irregulars">
-                            <div class="hint-error" ng-style="routeForm.generator.$invalid && routeForm.generator.$touched?{'color':'red'}:''" >Obligatorio, max 100 caracteres</div>
+                            <input type="text" ng-model="route.site.irregulars" name="irregulars" required maxlength="100">
+                            <div class="hint-error" ng-style="routeForm.irregulars.$invalid && routeForm.irregulars.$touched?{'color':'red'}:''" >Obligatorio, max 100 caracteres</div>
                         </md-input-container>
 
                     </div>

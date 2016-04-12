@@ -1,26 +1,24 @@
 'use strict';
-var webtransporte = "http://transportetuzobus.us-east-1.elasticbeanstalk.com";
+//var webtransporte = "http://transportetuzobus.us-east-1.elasticbeanstalk.com";
+var webtransporte = "http://148.239.50.177:8888";
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
     'ngRoute',
     'myApp.view1',
     'myApp.login',
     'myApp.routes',
-    'myApp.addroute',
+    'myApp.manage',
     'myApp.add_route_polyline',
-    'myApp.site',
-    'myApp.addsite',
-    'myApp.private',
-    'myApp.addprivate',
     'myApp.taxi',
     'myApp.users',
     'myApp.password',
     'sidebarMenu',
     'ngMaterial',
-    'md.data.table'
+    'md.data.table',
+    'ngMessages'
 ]).config(function ($routeProvider)
     {
-        $routeProvider.otherwise({redirectTo: '/route'});
+        $routeProvider.otherwise({redirectTo: '/routes/2'});
 
     }
 ).run(function ($rootScope, $location)
@@ -28,13 +26,13 @@ angular.module('myApp', [
 
     $rootScope.$on("$routeChangeStart", function (event, next)
     {
-        if(next.$$route != undefined)
+        if (next.$$route != undefined)
         {
             var path = next.$$route.originalPath;
             if (localStorage.getItem('username') != null)
             {
-                if(path == "/login")
-                    $location.path("/route");
+                if (path == "/login")
+                    $location.path("/routes/2");
             }
             else
             {
@@ -65,26 +63,25 @@ angular.module('myApp', [
     $mdThemingProvider.definePalette('customPrimary', customPrimary);
 
     var customAccent = {
-        '50': '#737373',
-        '100': '#666666',
-        '200': '#595959',
-        '300': '#4d4d4d',
-        '400': '#404040',
-        '500': '#333',
-        '600': '#262626',
-        '700': '#1a1a1a',
-        '800': '#0d0d0d',
-        '900': '#000000',
-        'A100': '#808080',
-        'A200': '#8c8c8c',
-        'A400': '#999999',
-        'A700': '#000000'
+        '50': '#ffffff',
+        '100': '#ffffff',
+        '200': '#ffffff',
+        '300': '#ffffff',
+        '400': '#ffffff',
+        '500': '#fff',
+        '600': '#f2f2f2',
+        '700': '#e6e6e6',
+        '800': '#d9d9d9',
+        '900': '#cccccc',
+        'A100': '#ffffff',
+        'A200': '#ffffff',
+        'A400': '#ffffff',
+        'A700': '#bfbfbf'
     };
-
     $mdThemingProvider.definePalette('customAccent', customAccent);
 
     $mdThemingProvider.theme('default').primaryPalette('customPrimary').accentPalette('customAccent').warnPalette('red');
-}).config(function($httpProvider)
+}).config(function ($httpProvider)
 {
     $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.withCredentials = true;

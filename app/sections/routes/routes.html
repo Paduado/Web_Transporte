@@ -3,12 +3,12 @@
         <md-icon flex="5" md-svg-src="resources/icons/ic_search.svg"></md-icon>
         <input ng-model="filter" ng-change="onFilterChange()" flex="70" placeholder="Buscar" class="search-input" id="search" type="text">
         <label style="color:#27a340; margin-top: 2.3em">AGREGAR</label>
-        <md-button ng-click="go('/manage/route/new')" style="margin-top: 2em !important;" class="md-fab md-mini md-primary" aria-label="agregar">
+        <md-button ng-click="go('/manage/'+routeType+'/new')" style="margin-top: 2em !important;" class="md-fab md-mini md-primary" aria-label="agregar">
             <md-icon md-svg-src="resources/icons/ic_add.svg"></md-icon>
         </md-button>
     </div>
 
-    <div layout="row" layout-margin layout-align="center">
+    <div layout="row" layout-margin layout-align="center" ng-show="routeType == 'route'">
         <md-checkbox flex="30" class="md-primary" ng-change="page = 1" ng-init="checkType1 = true" ng-model="checkType1" aria-label="Checkbox 1">
             Autobús
         </md-checkbox>
@@ -49,6 +49,8 @@
     <table class="routes-table">
         <thead>
         <tr>
+            <td ng-click="order('name')">NOMBRE<span><md-icon ng-style="predicate == 'name'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
+            </td>
             <td ng-click="order('key')">CLAVE MNEMOTÉCNICA<span><md-icon ng-style="predicate == 'key'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
             </td>
             <td ng-click="order('schedule')">ITINERARIO<span><md-icon ng-style="predicate == 'schedule'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
@@ -63,6 +65,7 @@
         </thead>
         <tbody style="overflow: auto;height: 300px !important;">
         <tr ng-repeat="route in filtered = (routes |filter:filter |filter:isTypeChecked) |orderBy:predicate:reverse| limitTo: limit: (page - 1) * limit" ng-style="$even?{'background-color':'#f2f4f4'}:''">
+            <td>{{route.name}}</td>
             <td>{{route.key}}</td>
             <td>{{route.itinerary}}</td>
             <td ><a style="text-overflow: ellipsis; width: 300px;display: inline-block; white-space: nowrap;overflow: hidden" href="{{route.link}}" target="_blank">{{route.link}}</a></td>
@@ -71,7 +74,7 @@
             </td>
             <td>
                 <md-button style="min-width: 0">
-                    <md-icon md-svg-src="resources/icons/ic_edit.svg" style="color:#27A340" ng-click="go('/manage/route/'+route.key)"></md-icon>
+                    <md-icon md-svg-src="resources/icons/ic_edit.svg" style="color:#27A340" ng-click="go('/manage/'+routeType+'/'+route.key)"></md-icon>
                 </md-button>
             </td>
         </tr>
