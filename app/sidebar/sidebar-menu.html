@@ -38,10 +38,13 @@
             </div>
             <md-divider></md-divider>
             <ul class="sidebar-nav tree transition" style="display: none">
-                <li ng-click="setTab(7); go('/users')" class="sidebar-item transition" ng-class="isTabSelected(7)?'selected':''" md-ink-ripple="#FFFFFF">
+                <li ng-click="setTab(7); go('/notifications')" class="sidebar-item transition" ng-class="isTabSelected(7)?'selected':''" md-ink-ripple="#FFFFFF">
+                    <p>Notificaciones</p>
+                </li>
+                <li ng-click="setTab(8); go('/users')" class="sidebar-item transition" ng-class="isTabSelected(8)?'selected':''" md-ink-ripple="#FFFFFF">
                     <p>Usuarios</p>
                 </li>
-                <li ng-click="setTab(8); go('/password')" class="sidebar-item transition" ng-class="isTabSelected(8)?'selected':''" md-ink-ripple="#FFFFFF">
+                <li ng-click="setTab(9); go('/password')" class="sidebar-item transition" ng-class="isTabSelected(9)?'selected':''" md-ink-ripple="#FFFFFF">
                     <p>Administrar</p>
                 </li>
                 <li ng-click="setTab(1); logout()" class="sidebar-item transition" ng-class="isTabSelected(9)?'selected':''" md-ink-ripple="#FFFFFF">

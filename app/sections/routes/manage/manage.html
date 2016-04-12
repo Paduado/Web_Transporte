@@ -3,7 +3,7 @@
         <md-button ng-click="go('/routes/'+route.type)" class="md-raised gray-btn">Cancelar</md-button>
     </div>
     <div layout="column" flex-offset="5">
-        <md-button ng-click="saveRoute()" ng-disabled="routeForm.$invalid" class="md-raised gray-btn">Guardar</md-button>
+        <md-button ng-click="saveRoute()" ng-disabled="!isFormValid()" class="md-raised gray-btn">Guardar</md-button>
     </div>
 </div>
 <div style="overflow: auto;height: calc(100% - 90px);padding: 1em;box-sizing: border-box">

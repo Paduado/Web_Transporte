@@ -9,6 +9,8 @@ angular.module('myApp.routes', ['ngRoute']).config([
     }
 ]).controller('routesCtrl', function ($scope, $mdDialog, $routeParams)
 {
+    $scope.userLevel = localStorage.getItem('level');
+
     switch ($routeParams.route_type)
     {
         case "1":
@@ -34,33 +36,39 @@ angular.module('myApp.routes', ['ngRoute']).config([
             {
                 if (response.response_code == 200)
                 {
-                    $scope.$apply(function ()
-                    {
-                        $scope.routes = response.routes;
 
-                    });
+                    $scope.routes = response.routes;
+                    $scope.$digest();
+
                 }
                 else
                 {
-                    $mdDialog.show(
-                        $mdDialog.alert()
-                            .clickOutsideToClose(true)
-                            .title('Error al obtener las rutas')
-                            .ariaLabel('Dialog route error')
-                            .ok('Aceptar')
-                    );
+                    $scope.$apply(function ()
+                    {
+                        $mdDialog.show(
+                            $mdDialog.alert()
+                                .clickOutsideToClose(true)
+                                .title('Error al obtener las rutas')
+                                .ariaLabel('Dialog route error')
+                                .ok('Aceptar')
+                        );
+                    });
+
                 }
             }, 'json')
             .fail(function ()
             {
-                $mdDialog.show(
-                    $mdDialog.alert()
-                        .clickOutsideToClose(true)
-                        .title('Error en el servidor')
-                        .textContent('Contacte al administrador.')
-                        .ariaLabel('Dialog login error')
-                        .ok('Aceptar')
-                );
+                $scope.$apply(function ()
+                {
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                            .clickOutsideToClose(true)
+                            .title('Error en el servidor')
+                            .textContent('Contacte al administrador.')
+                            .ariaLabel('Dialog login error')
+                            .ok('Aceptar')
+                    );
+                });
             });
     }
 
@@ -151,25 +159,32 @@ angular.module('myApp.routes', ['ngRoute']).config([
                 }
                 else
                 {
-                    $mdDialog.show(
-                        $mdDialog.alert()
-                            .clickOutsideToClose(true)
-                            .title('Error al obtener las rutas')
-                            .ariaLabel('Dialog route error')
-                            .ok('Aceptar')
-                    );
+                    $scope.$apply(function ()
+                    {
+                        $mdDialog.show(
+                            $mdDialog.alert()
+                                .clickOutsideToClose(true)
+                                .title('Error al obtener las rutas')
+                                .ariaLabel('Dialog route error')
+                                .ok('Aceptar')
+                        );
+                    });
+
                 }
             }, 'json')
             .fail(function ()
             {
-                $mdDialog.show(
-                    $mdDialog.alert()
-                        .clickOutsideToClose(true)
-                        .title('Error en el servidor')
-                        .textContent('Contacte al administrador.')
-                        .ariaLabel('Dialog login error')
-                        .ok('Aceptar')
-                );
+                $scope.$apply(function ()
+                {
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                            .clickOutsideToClose(true)
+                            .title('Error en el servidor')
+                            .textContent('Contacte al administrador.')
+                            .ariaLabel('Dialog login error')
+                            .ok('Aceptar')
+                    );
+                });
             });
     };
 

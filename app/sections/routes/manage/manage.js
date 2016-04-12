@@ -6,7 +6,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
             controller: 'manageCtrl'
         });
     }
-]).controller('manageCtrl', function ($scope, $routeParams,$mdDialog,$location)
+]).controller('manageCtrl', function ($scope, $routeParams, $mdDialog, $location)
 {
     $scope.route = {};
 
@@ -31,7 +31,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
     }
 
 
-    if($routeParams.route_key != "new")
+    if ($routeParams.route_key != "new")
     {
         $.post(webtransporte + '/admin/get/route',
             {
@@ -42,10 +42,8 @@ angular.module('myApp.manage', ['ngRoute']).config([
             {
                 if (response.response_code == 200)
                 {
-                    $scope.$apply(function ()
-                    {
-                        $scope.route = response.route;
-                    });
+                    $scope.route = response.route;
+                    $scope.$digest();
 
                     $scope.getLocalities(response.route.municipalityId);
                 }
@@ -54,7 +52,6 @@ angular.module('myApp.manage', ['ngRoute']).config([
     }
 
     getSelectsContent();
-
 
 
     /********************************
@@ -67,11 +64,11 @@ angular.module('myApp.manage', ['ngRoute']).config([
             controller: 'add_route_polylineCtrl',
             templateUrl: 'sections/routes/manage/add_route_polyline/add_route_polyline.html',
             parent: angular.element(document.body),
-            escapeToClose:false,
+            escapeToClose: false,
             fullscreen: false,
-            locals:{
-                data:{
-                    route:$scope.route.concession_route
+            locals: {
+                data: {
+                    route: $scope.route.concession_route
                 }
             }
         }).then(function (data)
@@ -87,14 +84,14 @@ angular.module('myApp.manage', ['ngRoute']).config([
      top buttons
      *********************************/
 
-    $scope.saveRoute = function()
+    $scope.saveRoute = function ()
     {
-        if($routeParams.route_key == "new")
+        if ($routeParams.route_key == "new")
         {
             $.post(webtransporte + '/admin/new/route',
                 {
                     public_key: localStorage.getItem('public_key'),
-                    route:JSON.stringify($scope.route)
+                    route: JSON.stringify($scope.route)
                 }, function (response)
                 {
                     if (response.response_code == 200)
@@ -109,7 +106,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
                                     .ariaLabel('Dialog route added')
                                     .ok('Aceptar')
                             );
-                            $location.path('/routes/'+$scope.route.type);
+                            $location.path('/routes/' + $scope.route.type);
                         });
                     }
                     else
@@ -126,8 +123,8 @@ angular.module('myApp.manage', ['ngRoute']).config([
                             );
                         });
                     }
-                },'json')
-                .fail(function()
+                }, 'json')
+                .fail(function ()
                 {
                     $scope.$apply(function ()
                     {
@@ -148,8 +145,8 @@ angular.module('myApp.manage', ['ngRoute']).config([
             $.post(webtransporte + '/admin/update/route',
                 {
                     public_key: localStorage.getItem('public_key'),
-                    route_key:$routeParams.route_key,
-                    route:JSON.stringify($scope.route)
+                    route_key: $routeParams.route_key,
+                    route: JSON.stringify($scope.route)
                 }, function (response)
                 {
                     if (response.response_code == 200)
@@ -164,7 +161,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
                                     .ariaLabel('Dialog route added')
                                     .ok('Aceptar')
                             );
-                            $location.path('/routes/'+$scope.route.type);
+                            $location.path('/routes/' + $scope.route.type);
                         });
                     }
                     else
@@ -181,8 +178,8 @@ angular.module('myApp.manage', ['ngRoute']).config([
                             );
                         });
                     }
-                },'json')
-                .fail(function()
+                }, 'json')
+                .fail(function ()
                 {
                     $scope.$apply(function ()
                     {
@@ -201,22 +198,19 @@ angular.module('myApp.manage', ['ngRoute']).config([
     };
 
 
-
-
-
     /********************************
      route params
      *********************************/
-    $scope.routeTypeEquals = function(type)
+    $scope.routeTypeEquals = function (type)
     {
-          return $routeParams.type == type;
+        return $routeParams.type == type;
     };
 
-    $scope.isNewRoute = function()
+    $scope.isNewRoute = function ()
     {
         return $routeParams.route_key == "new"
     };
-    $scope.getRouteType = function()
+    $scope.getRouteType = function ()
     {
         switch ($routeParams.type)
         {
@@ -228,7 +222,6 @@ angular.module('myApp.manage', ['ngRoute']).config([
                 return 3;
         }
     };
-
 
 
     /********************************
@@ -249,21 +242,18 @@ angular.module('myApp.manage', ['ngRoute']).config([
 
                 reader.onload = function (e)
                 {
-                    $scope.route.image = e.target.result;
                     $('#preview').attr('src', e.target.result);
+
+                    $scope.route.image = e.target.result;
+                    $scope.$digest();
+
+
                 };
 
                 reader.readAsDataURL(this.files[0]);
             }
         });
     };
-
-
-
-
-
-
-
 
 
     /********************************
@@ -314,7 +304,8 @@ angular.module('myApp.manage', ['ngRoute']).config([
         });
 
     }
-    $scope.getLocalities =  function (municipalityId)
+
+    $scope.getLocalities = function (municipalityId)
     {
         $.post(webtransporte + '/admin/get/localities', {
             public_key: localStorage.getItem('public_key'),
@@ -332,16 +323,23 @@ angular.module('myApp.manage', ['ngRoute']).config([
     };
 
 
-
-
-
-
     /********************************
      service units
      *********************************/
 
-    $scope.chipsChanged = function()
+    $scope.chipsChanged = function ()
     {
         console.log($scope.route.private_route.service_units);
     };
+
+
+    /********************************
+     form validation
+     *********************************/
+
+    $scope.isFormValid = function ()
+    {
+        return $scope.routeForm.$valid && $scope.route.image != '';
+    };
+
 });

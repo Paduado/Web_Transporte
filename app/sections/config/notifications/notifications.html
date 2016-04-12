@@ -1,0 +1,9 @@
+<md-card style="width: 50%;margin-left: 25%;margin-top: 10%;">
+        <div layout="column" flex="100" layout-align="center center">
+            <input class="notification-input" placeholder="Mensaje" ng-model="body" ng-init="body = ''">
+
+            <md-button ng-click="sendPush()" ng-disabled="body == ''" class="md-raised md-primary" style="width: 200px">Enviar</md-button>
+        </div>
+
+
+</md-card>
