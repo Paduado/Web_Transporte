@@ -6,7 +6,7 @@ angular.module('myApp.login', ['ngRoute']).config([
             controller: 'loginCtrl'
         });
     }
-]).controller('loginCtrl', function ($scope, $location, $mdDialog)
+]).controller('loginCtrl', function ($scope, $location, $mdDialog,$interval)
 {
     //$('.main_container').addClass('login-background');
 
@@ -38,6 +38,24 @@ angular.module('myApp.login', ['ngRoute']).config([
                         //$('.main_container').removeClass('login-background');
 
                         $location.path('/route');
+                        var hearbeat = $interval(function()
+                        {
+                            $.post(webtransporte + '/admin/heartbeat', {
+                                public_key: localStorage.getItem('public_key')
+                            }, function(response)
+                            {
+                                if(response.response_code != 200)
+                                {
+                                    $scope.logout();
+                                    $interval.cancel(hearbeat);
+                                }
+
+                            },'json').fail(function()
+                            {
+                                $scope.logout();
+                                $interval.cancel(hearbeat);
+                            });
+                        }, 10000);
                     });
 
                 }

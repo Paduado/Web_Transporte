@@ -1,6 +1,6 @@
 'use strict';
-//var webtransporte = "http://transportetuzobus.us-east-1.elasticbeanstalk.com";
-var webtransporte = "http://148.239.50.191:80";
+var webtransporte = "http://transportetuzobus.us-east-1.elasticbeanstalk.com";
+//var webtransporte = "http://148.239.50.191:80";
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
     'ngRoute',
@@ -8,12 +8,14 @@ angular.module('myApp', [
     'myApp.routes',
     'myApp.manage',
     'myApp.add_route_polyline',
+    'myApp.add_loc',
     'myApp.taxi',
     'myApp.users',
     'myApp.password',
     'myApp.notifications',
     'sidebarMenu',
     'ngMaterial',
+    'encode',
     'md.data.table',
     'ngMessages'
 ]).config(function ($routeProvider)

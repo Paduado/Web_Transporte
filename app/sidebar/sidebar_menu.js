@@ -3,36 +3,36 @@
  */
 'use strict';
 
-(function ()
+(function()
 {
     var app = angular.module('sidebarMenu', []);
-    app.directive('sidebarMenu', function ()
+    app.directive('sidebarMenu', function()
     {
         return {
             restrict: 'E',
             templateUrl: 'sidebar/sidebar-menu.html',
-            controller: function ($scope, $location)
+            controller: function($scope, $location, $interval)
             {
                 $scope.tab = 1;
 
-                $scope.isTabSelected = function (tab)
+                $scope.isTabSelected = function(tab)
                 {
                     return (tab == $scope.tab);
                 };
-                $scope.setTab = function (tab)
+                $scope.setTab = function(tab)
                 {
                     $scope.tab = tab;
                 };
-                $scope.go = function (path)
+                $scope.go = function(path)
                 {
                     $location.path(path);
                 };
-                $scope.logout = function (path)
+                $scope.logout = function(path)
                 {
                     localStorage.clear();
                     location.reload();
                 };
-                $('.tree-toggler').click(function ()
+                $('.tree-toggler').click(function()
                 {
                     $(this).parent().children('ul.tree').toggle('blind');
                 });
@@ -48,18 +48,21 @@
                     $location.path('/login')
 
                 };
+
+
+                
             },
             controllerAs: 'sidebarCtrl'
         };
     });
-    app.config(function ($logProvider)
+    app.config(function($logProvider)
     {
         $logProvider.debugEnabled(true);
     });
 })();
-$(document).ready(function ()
+$(document).ready(function()
 {
-    $('.tree-toggler').click(function ()
+    $('.tree-toggler').click(function()
     {
         $(this).parent().children('ul.tree').toggle(300);
     });

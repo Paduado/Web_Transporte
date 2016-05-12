@@ -49,17 +49,19 @@
     <table class="routes-table">
         <thead>
         <tr>
-            <td ng-click="order('name')">NOMBRE<span><md-icon ng-style="predicate == 'name'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
+            <td ng-click="order('name')" style="width: 15%">NOMBRE<span><md-icon ng-style="predicate == 'name'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
             </td>
-            <td ng-click="order('key')">CLAVE MNEMOTÉCNICA<span><md-icon ng-style="predicate == 'key'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
+            <td ng-click="order('key')" style="width: 10%">CLAVE MNEMOTÉCNICA<span><md-icon ng-style="predicate == 'key'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
             </td>
-            <td ng-click="order('schedule')">ITINERARIO<span><md-icon ng-style="predicate == 'schedule'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
+            <td ng-click="order('schedule')" >ITINERARIO<span><md-icon ng-style="predicate == 'schedule'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
             </td>
-            <td ng-click="order('link')">HIPERVÍNCULO GOOGLE MAPS<span><md-icon ng-style="predicate == 'link'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
+            <td ng-click="order('link')" style="width: 15%">HIPERVÍNCULO GOOGLE MAPS<span><md-icon ng-style="predicate == 'link'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
             </td>
-            <td ng-click="order('status')">STATUS<span><md-icon ng-style="predicate == 'status'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
+            <td ng-if="routeType == 'route'" style="width: 15%">TIPO
             </td>
-            <td>EDITAR
+            <td ng-click="order('status')" style="width: 7%">ESTATUS<span><md-icon ng-style="predicate == 'status'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
+            </td>
+            <td style="width: 7%">EDITAR
             </td>
         </tr>
         </thead>
@@ -68,7 +70,8 @@
             <td>{{route.name}}</td>
             <td>{{route.key}}</td>
             <td>{{route.itinerary}}</td>
-            <td ><a style="text-overflow: ellipsis; width: 300px;display: inline-block; white-space: nowrap;overflow: hidden" href="{{route.link}}" target="_blank">{{route.link}}</a></td>
+            <td ><a style="text-overflow: ellipsis; width: 150px;display: inline-block; white-space: nowrap;overflow: hidden" href="{{route.link}}" target="_blank">{{route.link}}</a></td>
+            <td ng-if="routeType == 'route'">{{getTypeString(route.concession_route.route_typeId)}}</td>
             <td>
                 <md-checkbox  ng-model="check" ng-init="check = route.enabled" ng-change="enableRoute(route.key,check)" class="md-primary"></md-checkbox>
             </td>

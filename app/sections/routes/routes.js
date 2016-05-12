@@ -75,6 +75,56 @@ angular.module('myApp.routes', ['ngRoute']).config([
     getRoutes();
 
 
+
+
+
+    $scope.enableRoute = function (key, enable)
+    {
+        $.post(webtransporte + '/admin/enable/route',
+            {
+                public_key: localStorage.getItem('public_key'),
+                route_key: key,
+                enable: enable ? 1 : 0
+            },
+            function (response)
+            {
+                if (response.response_code == 200)
+                {
+                    getRoutes();
+                }
+                else
+                {
+                    $scope.$apply(function ()
+                    {
+                        $mdDialog.show(
+                            $mdDialog.alert()
+                                .clickOutsideToClose(true)
+                                .title('Error al obtener las rutas')
+                                .ariaLabel('Dialog route error')
+                                .ok('Aceptar')
+                        );
+                    });
+
+                }
+            }, 'json')
+            .fail(function ()
+            {
+                $scope.$apply(function ()
+                {
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                            .clickOutsideToClose(true)
+                            .title('Error en el servidor')
+                            .textContent('Contacte al administrador.')
+                            .ariaLabel('Dialog login error')
+                            .ok('Aceptar')
+                    );
+                });
+            });
+    };
+
+
+
     $scope.limit = 5;
     $scope.page = 1;
     $scope.pages = [];
@@ -143,52 +193,6 @@ angular.module('myApp.routes', ['ngRoute']).config([
     };
 
 
-    $scope.enableRoute = function (key, enable)
-    {
-        $.post(webtransporte + '/admin/enable/route',
-            {
-                public_key: localStorage.getItem('public_key'),
-                route_key: key,
-                enable: enable ? 1 : 0
-            },
-            function (response)
-            {
-                if (response.response_code == 200)
-                {
-                    getRoutes();
-                }
-                else
-                {
-                    $scope.$apply(function ()
-                    {
-                        $mdDialog.show(
-                            $mdDialog.alert()
-                                .clickOutsideToClose(true)
-                                .title('Error al obtener las rutas')
-                                .ariaLabel('Dialog route error')
-                                .ok('Aceptar')
-                        );
-                    });
-
-                }
-            }, 'json')
-            .fail(function ()
-            {
-                $scope.$apply(function ()
-                {
-                    $mdDialog.show(
-                        $mdDialog.alert()
-                            .clickOutsideToClose(true)
-                            .title('Error en el servidor')
-                            .textContent('Contacte al administrador.')
-                            .ariaLabel('Dialog login error')
-                            .ok('Aceptar')
-                    );
-                });
-            });
-    };
-
-
     $scope.isTypeChecked = function (route)
     {
         return $scope.routeType != 'route'
@@ -196,6 +200,20 @@ angular.module('myApp.routes', ['ngRoute']).config([
             || ($scope.checkType2 ? route.concession_route.route_typeId == 2 : false)
             || ($scope.checkType3 ? route.concession_route.route_typeId == 3 : false);
     };
+
+
+    $scope.getTypeString = function(type)
+    {
+        switch(type)
+        {
+            case 1:
+                return "Autobús"
+            case 2:
+                return "TuzoBús Alimentadora"
+            case 3:
+                return "TuzoBús Truncal"
+        }
+    }
 
 
 });

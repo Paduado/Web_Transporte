@@ -1,16 +1,38 @@
 angular.module('myApp.manage', ['ngRoute']).config([
-    '$routeProvider', function ($routeProvider)
+    '$routeProvider', function($routeProvider)
     {
         $routeProvider.when('/manage/:type/:route_key', {
             templateUrl: 'sections/routes/manage/manage.html',
             controller: 'manageCtrl'
         });
     }
-]).controller('manageCtrl', function ($scope, $routeParams, $mdDialog, $location)
+]).controller('manageCtrl', function($scope, $routeParams, $mdDialog, $location)
 {
     $scope.route = {};
 
-    switch ($routeParams.type)
+    // $scope.test = function()
+    // {
+    //     navigator.bluetooth.requestDevice({
+    //         filters: [
+    //             {services: ['00001101-0000-1000-8000-00805f9b34fb']}
+    //         ]
+    //     })
+    //     .then(function(device)
+    //     {
+    //         return device.gatt.connect();
+    //     })
+    //     .then(function(a)
+    //     {
+    //         console.log(a);
+    //     })
+    //     .catch(function(e)
+    //     {
+    //         console.log(e);
+    //     });
+    // };
+
+
+    switch($routeParams.type)
     {
         case "route":
             $scope.route.type = 2;
@@ -31,16 +53,16 @@ angular.module('myApp.manage', ['ngRoute']).config([
     }
 
 
-    if ($routeParams.route_key != "new")
+    if($routeParams.route_key != "new")
     {
         $.post(webtransporte + '/admin/get/route',
             {
                 public_key: localStorage.getItem('public_key'),
                 route_key: $routeParams.route_key
 
-            }, function (response)
+            }, function(response)
             {
-                if (response.response_code == 200)
+                if(response.response_code == 200)
                 {
                     $scope.route = response.route;
                     $scope.$digest();
@@ -58,7 +80,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
      polyline modal
      *********************************/
 
-    $scope.addPolyline = function ()
+    $scope.addPolyline = function()
     {
         $mdDialog.show({
             controller: 'add_route_polylineCtrl',
@@ -71,11 +93,25 @@ angular.module('myApp.manage', ['ngRoute']).config([
                     route: $scope.route.concession_route
                 }
             }
-        }).then(function (data)
+        }).then(function(data)
         {
             $scope.route.link = data.url;
             $scope.route.concession_route.polyline = data.polyline;
             $scope.route.concession_route.stops = data.stops;
+        });
+    };
+    
+    $scope.addLoc = function()
+    {
+        $mdDialog.show({
+            controller: 'add_locCtrl',
+            templateUrl: 'sections/routes/manage/add_loc/add_loc.html',
+            parent: angular.element(document.body),
+            escapeToClose: false,
+            fullscreen: false
+        }).then(function(url)
+        {
+            $scope.route.link = url;
         });
     };
 
@@ -84,60 +120,60 @@ angular.module('myApp.manage', ['ngRoute']).config([
      top buttons
      *********************************/
 
-    $scope.saveRoute = function ()
+    $scope.saveRoute = function()
     {
-        if ($routeParams.route_key == "new")
+        if($routeParams.route_key == "new")
         {
             $.post(webtransporte + '/admin/new/route',
                 {
                     public_key: localStorage.getItem('public_key'),
                     route: JSON.stringify($scope.route)
-                }, function (response)
+                }, function(response)
                 {
-                    if (response.response_code == 200)
+                    if(response.response_code == 200)
                     {
 
-                        $scope.$apply(function ()
+                        $scope.$apply(function()
                         {
                             $mdDialog.show(
                                 $mdDialog.alert()
-                                    .clickOutsideToClose(true)
-                                    .title('Ruta Agregada')
-                                    .ariaLabel('Dialog route added')
-                                    .ok('Aceptar')
+                                .clickOutsideToClose(true)
+                                .title('Ruta Agregada')
+                                .ariaLabel('Dialog route added')
+                                .ok('Aceptar')
                             );
                             $location.path('/routes/' + $scope.route.type);
                         });
                     }
                     else
                     {
-                        $scope.$apply(function ()
+                        $scope.$apply(function()
                         {
                             $mdDialog.show(
                                 $mdDialog.alert()
-                                    .clickOutsideToClose(true)
-                                    .title('Error al guardar')
-                                    .ariaLabel('Alguno de los parametros es inválido')
-                                    .textContent('Alguno de los parametros es inválido')
-                                    .ok('Aceptar')
-                            );
-                        });
-                    }
-                }, 'json')
-                .fail(function ()
-                {
-                    $scope.$apply(function ()
-                    {
-                        $mdDialog.show(
-                            $mdDialog.alert()
                                 .clickOutsideToClose(true)
                                 .title('Error al guardar')
                                 .ariaLabel('Alguno de los parametros es inválido')
                                 .textContent('Alguno de los parametros es inválido')
                                 .ok('Aceptar')
-                        );
-                    });
+                            );
+                        });
+                    }
+                }, 'json')
+            .fail(function()
+            {
+                $scope.$apply(function()
+                {
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('Error al guardar')
+                        .ariaLabel('Alguno de los parametros es inválido')
+                        .textContent('Alguno de los parametros es inválido')
+                        .ok('Aceptar')
+                    );
                 });
+            });
         }
         else
         {
@@ -147,52 +183,52 @@ angular.module('myApp.manage', ['ngRoute']).config([
                     public_key: localStorage.getItem('public_key'),
                     route_key: $routeParams.route_key,
                     route: JSON.stringify($scope.route)
-                }, function (response)
+                }, function(response)
                 {
-                    if (response.response_code == 200)
+                    if(response.response_code == 200)
                     {
 
-                        $scope.$apply(function ()
+                        $scope.$apply(function()
                         {
                             $mdDialog.show(
                                 $mdDialog.alert()
-                                    .clickOutsideToClose(true)
-                                    .title('Ruta Guardada')
-                                    .ariaLabel('Dialog route added')
-                                    .ok('Aceptar')
+                                .clickOutsideToClose(true)
+                                .title('Ruta Guardada')
+                                .ariaLabel('Dialog route added')
+                                .ok('Aceptar')
                             );
                             $location.path('/routes/' + $scope.route.type);
                         });
                     }
                     else
                     {
-                        $scope.$apply(function ()
+                        $scope.$apply(function()
                         {
                             $mdDialog.show(
                                 $mdDialog.alert()
-                                    .clickOutsideToClose(true)
-                                    .title('Error al guardar')
-                                    .ariaLabel('Alguno de los parametros es inválido')
-                                    .textContent('Alguno de los parametros es inválido')
-                                    .ok('Aceptar')
-                            );
-                        });
-                    }
-                }, 'json')
-                .fail(function ()
-                {
-                    $scope.$apply(function ()
-                    {
-                        $mdDialog.show(
-                            $mdDialog.alert()
                                 .clickOutsideToClose(true)
                                 .title('Error al guardar')
                                 .ariaLabel('Alguno de los parametros es inválido')
                                 .textContent('Alguno de los parametros es inválido')
                                 .ok('Aceptar')
-                        );
-                    });
+                            );
+                        });
+                    }
+                }, 'json')
+            .fail(function()
+            {
+                $scope.$apply(function()
+                {
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('Error al guardar')
+                        .ariaLabel('Alguno de los parametros es inválido')
+                        .textContent('Alguno de los parametros es inválido')
+                        .ok('Aceptar')
+                    );
                 });
+            });
         }
 
     };
@@ -201,18 +237,18 @@ angular.module('myApp.manage', ['ngRoute']).config([
     /********************************
      route params
      *********************************/
-    $scope.routeTypeEquals = function (type)
+    $scope.routeTypeEquals = function(type)
     {
         return $routeParams.type == type;
     };
 
-    $scope.isNewRoute = function ()
+    $scope.isNewRoute = function()
     {
         return $routeParams.route_key == "new"
     };
-    $scope.getRouteType = function ()
+    $scope.getRouteType = function()
     {
-        switch ($routeParams.type)
+        switch($routeParams.type)
         {
             case 'route':
                 return 2;
@@ -228,19 +264,19 @@ angular.module('myApp.manage', ['ngRoute']).config([
      image
      *********************************/
 
-    $scope.selectFile = function ()
+    $scope.selectFile = function()
     {
         $('#file').click();
 
         $('#file').off('change');
 
-        $('#file').on('change', function ()
+        $('#file').on('change', function()
         {
-            if (this.files && this.files[0])
+            if(this.files && this.files[0])
             {
                 var reader = new FileReader();
 
-                reader.onload = function (e)
+                reader.onload = function(e)
                 {
                     $('#preview').attr('src', e.target.result);
 
@@ -265,11 +301,11 @@ angular.module('myApp.manage', ['ngRoute']).config([
     {
         $.post(webtransporte + '/admin/get/states', {
             public_key: localStorage.getItem('public_key')
-        }, function (response)
+        }, function(response)
         {
-            if (response.response_code == 200)
+            if(response.response_code == 200)
             {
-                $scope.$apply(function ()
+                $scope.$apply(function()
                 {
                     $scope.states = response.states;
                 });
@@ -279,11 +315,11 @@ angular.module('myApp.manage', ['ngRoute']).config([
 
         $.post(webtransporte + '/admin/get/municipalities', {
             public_key: localStorage.getItem('public_key'),
-        }, function (response)
+        }, function(response)
         {
-            if (response.response_code == 200)
+            if(response.response_code == 200)
             {
-                $scope.$apply(function ()
+                $scope.$apply(function()
                 {
                     $scope.municipalities = response.municipalities;
                 });
@@ -292,11 +328,11 @@ angular.module('myApp.manage', ['ngRoute']).config([
 
         $.post(webtransporte + '/admin/get/vehicles', {
             public_key: localStorage.getItem('public_key')
-        }, function (response)
+        }, function(response)
         {
-            if (response.response_code == 200)
+            if(response.response_code == 200)
             {
-                $scope.$apply(function ()
+                $scope.$apply(function()
                 {
                     $scope.vehicles = response.vehicles;
                 });
@@ -305,16 +341,16 @@ angular.module('myApp.manage', ['ngRoute']).config([
 
     }
 
-    $scope.getLocalities = function (municipalityId)
+    $scope.getLocalities = function(municipalityId)
     {
         $.post(webtransporte + '/admin/get/localities', {
             public_key: localStorage.getItem('public_key'),
             municipalityId: municipalityId
-        }, function (response)
+        }, function(response)
         {
-            if (response.response_code == 200)
+            if(response.response_code == 200)
             {
-                $scope.$apply(function ()
+                $scope.$apply(function()
                 {
                     $scope.localities = response.localities;
                 });
@@ -327,7 +363,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
      service units
      *********************************/
 
-    $scope.chipsChanged = function ()
+    $scope.chipsChanged = function()
     {
         console.log($scope.route.private_route.service_units);
     };
@@ -337,7 +373,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
      form validation
      *********************************/
 
-    $scope.isFormValid = function ()
+    $scope.isFormValid = function()
     {
         return $scope.routeForm.$valid && $scope.route.image != '';
     };

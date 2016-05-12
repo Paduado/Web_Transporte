@@ -20,8 +20,8 @@ angular.module('myApp.add_route_polyline', ['ngRoute']).config([
 
         var mapDiv = document.getElementById('add-route-map');
         var map = new google.maps.Map(mapDiv, {
-            center: {lat: 0, lng: 0},
-            zoom: 15,
+            center: {lat: 20.098799, lng: -98.761757},
+            zoom: 14,
             mapTypeControl: false,
             streetViewControl: true,
             zoomControl: true,
@@ -30,7 +30,6 @@ angular.module('myApp.add_route_polyline', ['ngRoute']).config([
                 position: google.maps.ControlPosition.LEFT_TOP
             }
         });
-
 
 
         var markers = [];
@@ -49,6 +48,30 @@ angular.module('myApp.add_route_polyline', ['ngRoute']).config([
         map.addListener('click', function (e)
         {
             poly.getPath().push(e.latLng);
+        });
+
+        google.maps.event.addListenerOnce(map, 'idle', function ()
+        {
+            if (data.route.polyline != "")
+            {
+                var path = google.maps.geometry.encoding.decodePath(data.route.polyline);
+                for (var i = 0; i < path.length; i++)
+                {
+                    poly.getPath().push(path[i]);
+                    var stops = data.route.stops;
+                    for (var j = 0; j < stops.length; j++)
+                    {
+
+                        if (Math.round(path[i].lat() * 100000) / 100000 == Math.round(stops[j].lat * 100000) / 100000 && Math.round(path[i].lng() * 100000) / 100000 == Math.round(stops[j].lng * 100000) / 100000)
+                        {
+                            markers[i].isStop = true;
+                            markers[i].stopName = stops[j].name;
+                            markers[i].setIcon(getIcon(true));
+                        }
+                    }
+                }
+                zoomToObject(poly);
+            }
         });
 
         google.maps.event.addListener(poly, 'click', function (e)
@@ -152,47 +175,6 @@ angular.module('myApp.add_route_polyline', ['ngRoute']).config([
                 bounds.extend(points[n]);
             }
             map.fitBounds(bounds);
-        }
-
-
-        if (data.route.polyline != "")
-        {
-            var path = google.maps.geometry.encoding.decodePath(data.route.polyline);
-            for (var i = 0; i < path.length; i++)
-            {
-                poly.getPath().push(path[i]);
-                var stops = data.route.stops;
-                for (var j = 0; j < stops.length; j++)
-                {
-
-                    if (Math.round(path[i].lat() * 100000) / 100000 == Math.round(stops[j].lat * 100000) / 100000 && Math.round(path[i].lng() * 100000) / 100000 == Math.round(stops[j].lng * 100000) / 100000)
-                    {
-                        markers[i].isStop = true;
-                        markers[i].stopName = stops[j].name;
-                        markers[i].setIcon(getIcon(true));
-                    }
-                }
-            }
-            zoomToObject(poly);
-        }
-        else if (navigator.geolocation)
-        {
-            navigator.geolocation.getCurrentPosition(function (position)
-            {
-                var pos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                map.setCenter(pos);
-
-            }, function ()
-            {
-
-            });
-        } else
-        {
-            // Browser doesn't support Geolocation
-
         }
 
 

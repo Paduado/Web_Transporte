@@ -29,15 +29,15 @@
     background-color: white;
 }
 
-.users-table tbody tr
-{
-    cursor: pointer;
-}
+/*.users-table tbody tr*/
+/*{*/
+    /*cursor: pointer;*/
+/*}*/
 
-.users-table tbody tr:hover
-{
-    background-color: rgba(0,113,54,.1) !important;
-}
+/*.users-table tbody tr:hover*/
+/*{*/
+    /*background-color: rgba(0,113,54,.1) !important;*/
+/*}*/
 
 .users-table tbody td
 {
@@ -62,7 +62,22 @@
 
 .users-table th,.users-table td
 {
-    padding: 1em;
+    padding: .5em;
+}
+
+
+.edit-password-input{
+    max-height: 60px;
+    opacity: 1;
+    overflow: hidden;
+    width: 100%;
+    transition: all .5s;
+}
+
+.edit-password-input.ng-hide{
+    max-height: 0;
+    opacity: 0;
+    transition: all .5s;
 }
 
 

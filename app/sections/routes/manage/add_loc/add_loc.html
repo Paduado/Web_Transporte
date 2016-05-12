@@ -1,0 +1,20 @@
+<md-dialog id="map-container" style="width: 100%;height: 100%">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Asignar ubicación</h2>
+        </div>
+    </md-toolbar>
+    <div layout="row" style="height: 90%; position: relative" id="map-dialog-body">
+        <div layout="column" flex="100" style="height: 100%" id="add-loc-map"></div>
+    </div>
+    <md-dialog-actions style="height: 10%;position: absolute;right: 0;bottom: 0;text-align: end;">
+        <md-button style="margin: 1em" class="md-primary md-raised" ng-click="cancel()">
+            Cancelar
+        </md-button>
+        <md-button style="margin: 1em" class="md-primary md-raised" ng-click="accept()">
+            Guardar
+        </md-button>
+    </md-dialog-actions>
+
+
+</md-dialog>

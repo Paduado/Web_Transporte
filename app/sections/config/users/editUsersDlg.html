@@ -1,47 +1,50 @@
 <md-dialog>
     <md-dialog-content class="md-dialog-content">
         <div layout="column" style="width: 400px">
-            <h2>Crear usuario</h2>
+            <h2>Editar Usuario</h2>
 
             <md-input-container style="margin: 5px">
                 <label>Usuario</label>
-                <input  ng-model="user.username">
+                <input ng-model="user.username">
             </md-input-container>
 
             <md-input-container style="margin: 5px">
                 <label>Nombre</label>
-                <input  ng-model="user.name">
+                <input ng-model="user.name">
             </md-input-container>
 
             <md-input-container style="margin: 5px">
                 <label>Correo</label>
-                <input  ng-model="user.email">
-            </md-input-container>
-
-            <md-input-container style="margin: 5px">
-                <label>Contraseña</label>
-                <input  ng-model="user.password">
+                <input ng-model="user.email">
             </md-input-container>
 
             <md-input-container style="margin: 5px">
                 <label>Tipo</label>
-                <md-select ng-model="user.type" >
+                <md-select ng-model="user.level">
                     <md-option value="10">Administrador de lectura</md-option>
                     <md-option value="20">Administrador de escritura</md-option>
                     <md-option value="30">Super administrador</md-option>
                 </md-select>
             </md-input-container>
+            <br>
+            <md-checkbox style="margin-left: 10px;margin-bottom: 0" class="md-primary" ng-init="updatePass = false" ng-model="updatePass" >Cambiar contraseña</md-checkbox>
+            <div class="edit-password-input" ng-show="updatePass">
+                <md-input-container style="margin-left: 5px;width: calc(100% - 10px)">
+                    <label>Contraseña</label>
+                    <input ng-model="password">
+                </md-input-container>
+            </div>
         </div>
     </md-dialog-content>
     <md-dialog-actions layout="row">
-        <md-button ng-show="index != undefined" class="md-warn" ng-click="cancel()">
+        <md-button ng-show="index != undefined" class="md-warn" ng-click="delete()">
             Eliminar
         </md-button>
         <span flex></span>
         <md-button class="md-primary" ng-click="cancel()">
             Cancelar
         </md-button>
-        <md-button ng-disabled="user.username == '' || user.name == '' || user.email == '' || user.type == '' || user.password == ''" class="md-primary" ng-click="save()">
+        <md-button ng-disabled="user.username == '' || user.name == '' || user.email == '' || user.level == '' || user.password == ''" class="md-primary" ng-click="save()">
             Guardar
         </md-button>
     </md-dialog-actions>
