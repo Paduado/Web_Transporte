@@ -21,6 +21,8 @@
     </div>
     <br>
     <div layout="row" layout-margin layout-align="end">
+        <div style="color:#007136; font-size: 1.2em">{{title}}</div>
+        <div flex></div>
         <md-input-container>
             <label>Filas</label>
             <md-select ng-model="limit">
@@ -76,8 +78,8 @@
                 <md-checkbox  ng-model="check" ng-init="check = route.enabled" ng-change="enableRoute(route.key,check)" class="md-primary"></md-checkbox>
             </td>
             <td>
-                <md-button style="min-width: 0">
-                    <md-icon md-svg-src="resources/icons/ic_edit.svg" style="color:#27A340" ng-click="go('/manage/'+routeType+'/'+route.key)"></md-icon>
+                <md-button style="min-width: 0" ng-click="go('/manage/'+routeType+'/'+route.key)">
+                    <md-icon md-svg-src="resources/icons/ic_edit.svg" style="color:#27A340" ></md-icon>
                 </md-button>
             </td>
         </tr>

@@ -29,15 +29,15 @@
     background-color: white;
 }
 
-.fees-table tbody tr
-{
-    cursor: pointer;
-}
+/*.fees-table tbody tr*/
+/*{*/
+    /*cursor: pointer;*/
+/*}*/
 
-.fees-table tbody tr:hover
-{
-    background-color: rgba(0,113,54,.1) !important;
-}
+/*.fees-table tbody tr:hover*/
+/*{*/
+    /*background-color: rgba(0,113,54,.1) !important;*/
+/*}*/
 
 .fees-table tbody td
 {
@@ -62,7 +62,7 @@
 
 .fees-table th,.fees-table td
 {
-    padding: 1em;
+    padding: .5em;
 }
 
 

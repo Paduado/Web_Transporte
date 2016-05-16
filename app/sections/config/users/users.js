@@ -133,11 +133,11 @@ angular.module('myApp.users', ['ngRoute']).config([
             {
 
                 $scope.user = {
-                    id: user.id,
+                    user_id: user.id,
                     username: user.username,
                     name: user.name,
                     email: user.email,
-                    level: user.level
+                    type: user.level
                 };
 
                 $scope.cancel = function()
@@ -168,7 +168,7 @@ angular.module('myApp.users', ['ngRoute']).config([
             if(data.command == 'save')
             {
                 data.user.public_key = localStorage.getItem('public_key');
-                $.post(webtransporte + '/admin/delete/user', data.user,
+                $.post(webtransporte + '/admin/update/user', data.user,
                     function(response)
                     {
                         if(response.response_code == 200)

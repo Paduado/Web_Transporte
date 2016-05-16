@@ -20,7 +20,7 @@
 
             <md-input-container style="margin: 5px">
                 <label>Tipo</label>
-                <md-select ng-model="user.level">
+                <md-select ng-model="user.type">
                     <md-option value="10">Administrador de lectura</md-option>
                     <md-option value="20">Administrador de escritura</md-option>
                     <md-option value="30">Super administrador</md-option>
@@ -44,7 +44,7 @@
         <md-button class="md-primary" ng-click="cancel()">
             Cancelar
         </md-button>
-        <md-button ng-disabled="user.username == '' || user.name == '' || user.email == '' || user.level == '' || user.password == ''" class="md-primary" ng-click="save()">
+        <md-button ng-disabled="user.username == '' || user.name == '' || user.email == '' || user.type == '' || user.password == ''" class="md-primary" ng-click="save()">
             Guardar
         </md-button>
     </md-dialog-actions>

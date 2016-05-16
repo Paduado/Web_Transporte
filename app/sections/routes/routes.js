@@ -15,12 +15,16 @@ angular.module('myApp.routes', ['ngRoute']).config([
     {
         case "1":
             $scope.routeType = "site";
+            $scope.title = "SITIOS";
             break;
         case "2":
             $scope.routeType = "route";
+            $scope.title = "RUTAS";
             break;
         case "3":
             $scope.routeType = "private";
+            $scope.title = "PRIVADOS";
+            
             break;
     }
     $scope.routes = [];
@@ -213,7 +217,7 @@ angular.module('myApp.routes', ['ngRoute']).config([
             case 3:
                 return "TuzoBús Truncal"
         }
-    }
+    };
 
 
 });

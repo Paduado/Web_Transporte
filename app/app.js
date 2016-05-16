@@ -43,6 +43,30 @@ angular.module('myApp', [
             }
         }
     });
+
+    if(localStorage.getItem('userLogged'))
+    {
+        var hearbeat = $interval(function()
+        {
+            $.post(webtransporte + '/admin/heartbeat', {
+                public_key: localStorage.getItem('public_key')
+            }, function(response)
+            {
+                if(response.response_code != 200)
+                {
+                    $scope.logout();
+                    $interval.cancel(hearbeat);
+                }
+
+            },'json').fail(function()
+            {
+                $scope.logout();
+                $interval.cancel(hearbeat);
+            });
+        }, 10000);
+    }
+    
+
 }).config(function ($mdThemingProvider)
 {
     var customPrimary = {

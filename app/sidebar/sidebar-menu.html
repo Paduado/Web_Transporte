@@ -47,10 +47,13 @@
                 <li ng-click="setTab(9); go('/password')" class="sidebar-item transition" ng-class="isTabSelected(9)?'selected':''" md-ink-ripple="#FFFFFF">
                     <p>Administrar</p>
                 </li>
-                <li ng-click="setTab(1); logout()" class="sidebar-item transition" ng-class="isTabSelected(9)?'selected':''" md-ink-ripple="#FFFFFF">
-                    <p>Cerrar Sesión</p>
-                </li>
+
             </ul>
+        </li>
+        <li class="sidebar-header" style="display:inline-block;">
+            <div class="sidebar-nav-header "ng-click="logout()" md-ink-ripple="#FFFFFF" style="position: relative;padding-left: 2.5em">
+                <label>Salir</label>
+            </div>
         </li>
     </ul>
 </md-sidenav>

@@ -30,6 +30,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
     //         console.log(e);
     //     });
     // };
+    
 
 
     switch($routeParams.type)
@@ -65,6 +66,8 @@ angular.module('myApp.manage', ['ngRoute']).config([
                 if(response.response_code == 200)
                 {
                     $scope.route = response.route;
+                    $scope.vehicleKey = $scope.route.vehicle_typeId+"-"+$scope.route.vehicle_classId;
+                    $('#preview').attr('src', $scope.route.image);
                     $scope.$digest();
 
                     $scope.getLocalities(response.route.municipalityId);
@@ -95,12 +98,21 @@ angular.module('myApp.manage', ['ngRoute']).config([
             }
         }).then(function(data)
         {
-            $scope.route.link = data.url;
+            $scope.route.link = data.highResUrl;
             $scope.route.concession_route.polyline = data.polyline;
             $scope.route.concession_route.stops = data.stops;
+
+            toDataUrl(data.lowResUrl,function(result)
+            {
+                $scope.route.lowResMap = result;
+            });
+            toDataUrl(data.highResUrl,function(result)
+            {
+                $scope.route.highResMap = result;
+            });
         });
     };
-    
+
     $scope.addLoc = function()
     {
         $mdDialog.show({
@@ -109,11 +121,36 @@ angular.module('myApp.manage', ['ngRoute']).config([
             parent: angular.element(document.body),
             escapeToClose: false,
             fullscreen: false
-        }).then(function(url)
+        }).then(function(data)
         {
-            $scope.route.link = url;
+            $scope.route.link = data.highResUrl;
+            toDataUrl(data.lowResUrl,function(result)
+            {
+                $scope.route.lowResMap = result;
+            });
+            toDataUrl(data.highResUrl,function(result)
+            {
+                $scope.route.highResMap = result;
+            });
+
         });
     };
+
+
+
+    function toDataUrl(url, callback){
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = function() {
+            var reader  = new FileReader();
+            reader.onloadend = function () {
+                callback(reader.result);
+            };
+            reader.readAsDataURL(xhr.response);
+        };
+        xhr.open('GET', url);
+        xhr.send();
+    }
 
 
     /********************************
@@ -153,8 +190,8 @@ angular.module('myApp.manage', ['ngRoute']).config([
                                 $mdDialog.alert()
                                 .clickOutsideToClose(true)
                                 .title('Error al guardar')
-                                .ariaLabel('Alguno de los parametros es inválido')
-                                .textContent('Alguno de los parametros es inválido')
+                                .ariaLabel('Alguno de los parámetros es inválido')
+                                .textContent('Alguno de los parámetros es inválido')
                                 .ok('Aceptar')
                             );
                         });
@@ -168,8 +205,8 @@ angular.module('myApp.manage', ['ngRoute']).config([
                         $mdDialog.alert()
                         .clickOutsideToClose(true)
                         .title('Error al guardar')
-                        .ariaLabel('Alguno de los parametros es inválido')
-                        .textContent('Alguno de los parametros es inválido')
+                        .ariaLabel('Alguno de los parámetros es inválido')
+                        .textContent('Alguno de los parámetros es inválido')
                         .ok('Aceptar')
                     );
                 });
@@ -208,8 +245,8 @@ angular.module('myApp.manage', ['ngRoute']).config([
                                 $mdDialog.alert()
                                 .clickOutsideToClose(true)
                                 .title('Error al guardar')
-                                .ariaLabel('Alguno de los parametros es inválido')
-                                .textContent('Alguno de los parametros es inválido')
+                                .ariaLabel('Alguno de los parámetros es inválido')
+                                .textContent('Alguno de los parámetros es inválido')
                                 .ok('Aceptar')
                             );
                         });
@@ -223,8 +260,8 @@ angular.module('myApp.manage', ['ngRoute']).config([
                         $mdDialog.alert()
                         .clickOutsideToClose(true)
                         .title('Error al guardar')
-                        .ariaLabel('Alguno de los parametros es inválido')
-                        .textContent('Alguno de los parametros es inválido')
+                        .ariaLabel('Alguno de los parámetros es inválido')
+                        .textContent('Alguno de los parámetros es inválido')
                         .ok('Aceptar')
                     );
                 });
@@ -334,10 +371,18 @@ angular.module('myApp.manage', ['ngRoute']).config([
             {
                 $scope.$apply(function()
                 {
-                    $scope.vehicles = response.vehicles;
+
+                    $scope.vehicles = {};
+                    response.vehicles.forEach(function(vehicle)
+                    {
+                        $scope.vehicles[(vehicle.id + "-" + vehicle.class)] = vehicle;
+                    });
+
+                    
                 });
             }
         });
+
 
     }
 
@@ -378,4 +423,16 @@ angular.module('myApp.manage', ['ngRoute']).config([
         return $scope.routeForm.$valid && $scope.route.image != '';
     };
 
+
+
+
+    $scope.filterVehicles = function(vehicles,classId) {
+        var result = {};
+        angular.forEach(vehicles, function(vehicle, key) {
+            if (vehicle.class == classId) {
+                result[key] = vehicle;
+            }
+        });
+        return result;
+    }
 });

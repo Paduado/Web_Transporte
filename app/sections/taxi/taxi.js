@@ -1,88 +1,140 @@
 angular.module('myApp.taxi', ['ngRoute']).config([
-    '$routeProvider', function ($routeProvider)
+    '$routeProvider', function($routeProvider)
     {
         $routeProvider.when('/taxi', {
             templateUrl: 'sections/taxi/taxi.html', controller: 'taxiCtrl'
         });
     }
-]).controller('taxiCtrl', function ($scope, $mdDialog)
+]).controller('taxiCtrl', function($scope, $mdDialog)
 {
-    $scope.fees = [{km: 0, amount: 10}];
+    $scope.rates = [];
+
+    $scope.getRates = function()
+    {
+        $.post(webtransporte + '/admin/get/cab_rates', {
+            public_key: localStorage.getItem('public_key')
+        }, function(response)
+        {
+            if(response.response_code == 200)
+            {
+
+                $scope.rates = response.rates;
+                $scope.$digest();
+            }
+            else
+            {
+                $mdDialog.show(
+                    $mdDialog.alert()
+                    .clickOutsideToClose(true)
+                    .title('Error al obtener las tarifas')
+                    .ariaLabel('Dialog route error')
+                    .ok('Aceptar')
+                );
+            }
+            console.log(response);
+        }, 'json')
+        .fail(function()
+        {
+            $mdDialog.show(
+                $mdDialog.alert()
+                .clickOutsideToClose(true)
+                .title('Error en el servidor')
+                .textContent('Contacte al administrador.')
+                .ariaLabel('Dialog login error')
+                .ok('Aceptar')
+            );
+        });
+    };
 
 
-    $scope.openFeesDialog = function (data)
+    $scope.getRates();
+    $scope.openRatesDialog = function(rate)
     {
         $mdDialog.show({
-            controller: addfeeCtrl,
             templateUrl: 'sections/taxi/taxiDlg.html',
             parent: angular.element(document.body),
             clickOutsideToClose: true,
             fullscreen: false,
             locals: {
-                data: data
-            }
-        }).then(function (data)
-        {
-            if (data.index != undefined)
-                $scope.fees[data.index] = data.fee;
-            else
-                $scope.fees.push(data.fee);
-        }, function (index)
-        {
-            if (index != undefined)
+                rate: rate
+            },
+            controller: function($scope, $mdDialog, rate)
             {
+                if(rate != undefined)
+                {
+                    $scope.cabRateID = rate.id;
+                    $scope.kms = rate.kms;
+                    $scope.rate = parseFloat(rate.rate);
+                    $scope.isNew = false;
+                    $scope.isDefault = $scope.kms === 0;
+                }
+                else
+                {
+                    $scope.isNew = true;
+                }
+                $scope.cancel = function()
+                {
+                    $mdDialog.cancel();
+                };
 
-                $mdDialog.show(
-                    $mdDialog.confirm()
-                        .title('¿Desea eliminar esta tarifa?')
-                        .ok('Eliminar')
-                        .cancel('Cancelar'))
-                    .then(function ()
+                $scope.create = function()
+                {
+
+                    $.post(webtransporte + '/admin/create/cab_rate', {
+                        public_key: localStorage.getItem('public_key'),
+                        kms:$scope.kms,
+                        rate:$scope.rate
+                    }, function(response)
                     {
-                        $scope.fees.splice(index, 1);
-                    });
+                        if(response.response_code == 200)
+                        {
+                            $mdDialog.hide();
+                        }
+                    }, 'json');
+                };
 
+                $scope.save = function()
+                {
+                    $.post(webtransporte + '/admin/update/cab_rate', {
+                        public_key: localStorage.getItem('public_key'),
+                        cabRateID:$scope.cabRateID,
+                        kms:$scope.kms,
+                        rate:$scope.rate
+                    }, function(response)
+                    {
+                        if(response.response_code == 200)
+                        {
+                            $mdDialog.hide();
+                        }
+                    }, 'json');
+                };
+
+                $scope.delete = function()
+                {
+                    $.post(webtransporte + '/admin/delete/cab_rate', {
+                        public_key: localStorage.getItem('public_key'),
+                        cabRateID:$scope.cabRateID
+                    }, function(response)
+                    {
+                        if(response.response_code == 200)
+                        {
+                            $mdDialog.hide();
+                        }
+                    }, 'json');
+                };
 
 
             }
+        }).then(function()
+        {
+            $scope.getRates();
         });
     };
 
-    $scope.editFee = function (data)
+    $scope.editRate = function(rate)
     {
-        $scope.openFeesDialog(data);
+        $scope.openRatesDialog(rate);
     };
 
-
-    function addfeeCtrl($scope, $mdDialog, data)
-    {
-        if (data != undefined)
-        {
-            $scope.km = data.fee.km;
-            $scope.amount = data.fee.amount;
-            $scope.index = data.index;
-            console.log(data);
-        }
-        else
-        {
-            $scope.km = "";
-            $scope.amount = "";
-        }
-        $scope.cancel = function (index)
-        {
-            $mdDialog.cancel(index);
-        };
-
-        $scope.save = function ()
-        {
-            $mdDialog.hide({
-                fee: {
-                    km: $scope.km,
-                    amount: $scope.amount
-                },
-                index: $scope.index
-            });
-        };
-    }
 
 });

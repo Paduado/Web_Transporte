@@ -37,8 +37,11 @@ angular.module('myApp.add_loc', ['ngRoute'])
 
         $scope.accept = function ()
         {
-            var url = "https://maps.googleapis.com/maps/api/staticmap?size=400x400&zoom=15&markers="+marker.getPosition().lat()+","+marker.getPosition().lng();
-            $mdDialog.hide(url);
+            var data = {
+                lowResUrl: "https://maps.googleapis.com/maps/api/staticmap?size=320x240&zoom=15&markers=" + marker.getPosition().lat() + "," + marker.getPosition().lng(),
+                highResUrl: "https://maps.googleapis.com/maps/api/staticmap?size=640x360&zoom=14&scale=2&markers=" + marker.getPosition().lat() + "," + marker.getPosition().lng()
+            };
+            $mdDialog.hide(data);
 
         };
     }, 1000);
