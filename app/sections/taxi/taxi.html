@@ -1,6 +1,6 @@
 <div layout="row" layout-margin layout-align="end" style="margin-right: 8.5em;margin-top: 1.5em">
     <label style="color:#27a340; margin-top: 2.3em">AGREGAR</label>
-    <md-button ng-click="openRatesDialog()" style="margin-top: 2em !important;" class="md-fab md-mini md-primary"><md-icon md-svg-src="resources/icons/ic_add.svg"></md-icon></md-button>
+    <md-button ng-disabled="getUserLevel() < 20" ng-click="openRatesDialog()" style="margin-top: 2em !important;" class="md-fab md-mini md-primary"><md-icon md-svg-src="resources/icons/ic_add.svg"></md-icon></md-button>
 </div>
 <label style="margin-left: 15%" class="card-header">ASIGNAR TARIFA</label>
 <br>
@@ -18,7 +18,7 @@
         <td>{{rate.kms+" km"}}</td>
         <td>{{rate.rate | currency}}</td>
         <td>
-            <md-button style="min-width: 0" ng-click="editRate(rate)">
+            <md-button ng-disabled="getUserLevel() < 20" style="min-width: 0" ng-click="editRate(rate)">
                 <md-icon md-svg-src="resources/icons/ic_edit.svg" style="color:#27A340" ></md-icon>
             </md-button>
         </td>

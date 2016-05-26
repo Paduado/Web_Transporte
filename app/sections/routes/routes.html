@@ -2,8 +2,8 @@
     <div layout="row" layout-margin layout-align="top">
         <md-icon flex="5" md-svg-src="resources/icons/ic_search.svg"></md-icon>
         <input ng-model="filter" ng-change="onFilterChange()" flex="70" placeholder="Buscar" class="search-input" id="search" type="text">
-        <label style="color:#27a340; margin-top: 2.3em">AGREGAR</label>
-        <md-button ng-click="go('/manage/'+routeType+'/new')" style="margin-top: 2em !important;" class="md-fab md-mini md-primary" aria-label="agregar">
+        <label  style="color:#27a340; margin-top: 2.3em">AGREGAR</label>
+        <md-button ng-disabled="getUserLevel() < 20" ng-click="go('/manage/'+routeType+'/new')" style="margin-top: 2em !important;" class="md-fab md-mini md-primary" aria-label="agregar">
             <md-icon md-svg-src="resources/icons/ic_add.svg"></md-icon>
         </md-button>
     </div>
@@ -63,7 +63,7 @@
             </td>
             <td ng-click="order('status')" style="width: 7%">ESTATUS<span><md-icon ng-style="predicate == 'status'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
             </td>
-            <td style="width: 7%">EDITAR
+            <td ng-if="getUserLevel() > 10" style="width: 7%">EDITAR
             </td>
         </tr>
         </thead>
@@ -75,10 +75,10 @@
             <td ><a style="text-overflow: ellipsis; width: 150px;display: inline-block; white-space: nowrap;overflow: hidden" href="{{route.link}}" target="_blank">{{route.link}}</a></td>
             <td ng-if="routeType == 'route'">{{getTypeString(route.concession_route.route_typeId)}}</td>
             <td>
-                <md-checkbox  ng-model="check" ng-init="check = route.enabled" ng-change="enableRoute(route.key,check)" class="md-primary"></md-checkbox>
+                <md-checkbox ng-disabled="getUserLevel() < 20" ng-model="check" ng-init="check = route.enabled" ng-change="enableRoute(route.key,check)" class="md-primary"></md-checkbox>
             </td>
-            <td>
-                <md-button style="min-width: 0" ng-click="go('/manage/'+routeType+'/'+route.key)">
+            <td >
+                <md-button ng-disabled="getUserLevel() < 20" style="min-width: 0" ng-click="go('/manage/'+routeType+'/'+route.key)">
                     <md-icon md-svg-src="resources/icons/ic_edit.svg" style="color:#27A340" ></md-icon>
                 </md-button>
             </td>

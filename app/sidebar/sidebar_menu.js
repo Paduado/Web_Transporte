@@ -27,11 +27,7 @@
                 {
                     $location.path(path);
                 };
-                $scope.logout = function(path)
-                {
-                    localStorage.clear();
-                    location.reload();
-                };
+
                 $('.tree-toggler').click(function()
                 {
                     $(this).parent().children('ul.tree').toggle('blind');
@@ -42,11 +38,9 @@
                     return $location.path() != "/login";
                 };
 
-                $scope.logout = function()
+                $scope.getUserLevel = function()
                 {
-                    localStorage.clear();
-                    $location.path('/login')
-
+                    return parseInt(localStorage.getItem('level'));
                 };
 
 

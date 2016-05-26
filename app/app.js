@@ -16,37 +16,55 @@ angular.module('myApp', [
     'sidebarMenu',
     'ngMaterial',
     'encode',
+    'about',
     'md.data.table',
     'ngMessages'
-]).config(function ($routeProvider)
+]).config(function($routeProvider)
     {
         $routeProvider.otherwise({redirectTo: '/routes/2'});
 
     }
-).run(function ($rootScope, $location)
+).run(function($rootScope, $location, $interval, $mdDialog)
 {
 
-    $rootScope.$on("$routeChangeStart", function (event, next)
+    $rootScope.$on("$routeChangeStart", function(event, next)
     {
-        if (next.$$route != undefined)
+        if(next.$$route != undefined)
         {
             var path = next.$$route.originalPath;
-            if (localStorage.getItem('username') != null)
+            if(localStorage.getItem('username') != null)
             {
-                if (path == "/login")
+                if(path == "/login")
                     $location.path("/routes/2");
             }
             else
             {
-                if (path != "/login")
+                if(path != "/login")
                     $location.path("/login");
             }
         }
     });
 
-    if(localStorage.getItem('userLogged'))
+
+    $rootScope.logout = function()
     {
-        var hearbeat = $interval(function()
+        localStorage.clear();
+        $mdDialog.show(
+            $mdDialog.confirm()
+            .clickOutsideToClose(true)
+            .title('Su sesión ha caducado')
+            .ariaLabel('Dialog login error')
+            .ok('Aceptar')
+        ).then(function()
+        {
+            $location.path('/login');
+        });
+    };
+
+
+    $interval(function()
+    {
+        if(localStorage.getItem('username'))
         {
             $.post(webtransporte + '/admin/heartbeat', {
                 public_key: localStorage.getItem('public_key')
@@ -54,20 +72,19 @@ angular.module('myApp', [
             {
                 if(response.response_code != 200)
                 {
-                    $scope.logout();
-                    $interval.cancel(hearbeat);
+                    $rootScope.logout();
                 }
 
-            },'json').fail(function()
+            }, 'json').fail(function(error)
             {
-                $scope.logout();
-                $interval.cancel(hearbeat);
+                if(error.status == 401)
+                    $rootScope.logout();
             });
-        }, 10000);
-    }
-    
+        }
+    }, 10000);
 
-}).config(function ($mdThemingProvider)
+
+}).config(function($mdThemingProvider)
 {
     var customPrimary = {
         '50': '#6ddc84',
@@ -107,7 +124,7 @@ angular.module('myApp', [
     $mdThemingProvider.definePalette('customAccent', customAccent);
 
     $mdThemingProvider.theme('default').primaryPalette('customPrimary').accentPalette('customAccent').warnPalette('red');
-}).config(function ($httpProvider)
+}).config(function($httpProvider)
 {
     $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.withCredentials = true;

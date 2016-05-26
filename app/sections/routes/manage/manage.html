@@ -6,6 +6,9 @@
     <div layout="column" flex-offset="5">
         <md-button ng-click="saveRoute()" ng-disabled="!isFormValid()" class="md-raised gray-btn">Guardar</md-button>
     </div>
+    <!--<div layout="column" flex-offset="5">-->
+        <!--<md-button ng-click="saveRoute()"  class="md-raised gray-btn">Guardar</md-button>-->
+    <!--</div>-->
 </div>
 <div style="overflow: auto;height: calc(100% - 90px);padding: 1em;box-sizing: border-box">
     <form name="routeForm">
@@ -25,9 +28,9 @@
         </div>
         <br>
         <br>
-        <label ng-if="routeTypeEquals('route')" class="card-header">DATOS DE IDENTIFICACION DE RUTA</label>
-        <label ng-if="routeTypeEquals('site')" class="card-header">DATOS DE IDENTIFICACION DEL SITIO</label>
-        <label ng-if="routeTypeEquals('private')" class="card-header">DATOS DE IDENTIFICACION DE PRIVADO</label>
+        <label ng-if="routeTypeEquals('route')" class="card-header">DATOS DE IDENTIFICACIÓN DE RUTA</label>
+        <label ng-if="routeTypeEquals('site')" class="card-header">DATOS DE IDENTIFICACIÓN DEL SITIO</label>
+        <label ng-if="routeTypeEquals('private')" class="card-header">DATOS DE IDENTIFICACIÓN DE PRIVADO</label>
         <md-card>
             <div layout="row" layout-align="center">
                 <div layout="column" flex="45">
@@ -44,13 +47,13 @@
                     <md-input-container>
                         <label>Ubicación</label>
                         <input type="text" ng-model="route.location">
-                        <div class="hint-error">Opcional max 100 caracteres</div>
+                        <div class="hint-error">Opcional máx. 100 caracteres</div>
                     </md-input-container>
                 </div>
                 <div layout="column" flex="45" flex-offset="10">
                     <md-input-container>
                         <label>Estado</label>
-                        <md-select ng-model="route.stateId" name="state" ng-change="getLocalities(route.stateId)" required>
+                        <md-select ng-model="route.stateId" name="state" ng-init="route.stateId = 13" disabled ng-change="getLocalities(route.stateId)" required>
                             <md-option ng-repeat="state in states" value="{{state.id}}">{{state.name}}</md-option>
                         </md-select>
                         <div class="hint-error" ng-style="routeForm.state.$invalid && routeForm.state.$touched?{'color':'red'}:''">Obligatorio</div>
@@ -81,6 +84,25 @@
                     <label>Itinerario</label>
                     <textarea rows="5" type="text" name="itinerary" ng-model="route.itinerary" required maxlength="400" md-maxlength="400"></textarea>
                     <div class="hint-error" ng-style="routeForm.itinerary.$invalid && routeForm.itinerary.$touched?{'color':'red'}:''">Obligatorio, máx. 400 caracteres</div>
+                </md-input-container>
+            </div>
+
+            <div layout="row">
+                <md-input-container style="width: 100%" ng-if="routeTypeEquals('site')">
+                    <label>Descripción</label>
+                    <textarea type="text" rows="3" ng-model="route.site.description" maxlength="100" md-maxlength="100"></textarea>
+                    <div class="hint-error">Opcional, máx. 100 caracteres</div>
+                </md-input-container>
+
+                <md-input-container style="width: 100%" ng-if="routeTypeEquals('route')">
+                    <label>Descripción</label>
+                    <textarea type="text" rows="3" ng-model="route.concession_route.description" maxlength="100" md-maxlength="100"></textarea>
+                    <div class="hint-error">Opcional, máx. 100 caracteres</div>
+                </md-input-container>
+                <md-input-container style="width: 100%" ng-if="routeTypeEquals('private')">
+                    <label>Descripción</label>
+                    <textarea type="text" rows="3" ng-model="route.private_route.description" maxlength="100" md-maxlength="100"></textarea>
+                    <div class="hint-error">Opcional, máx. 100 caracteres</div>
                 </md-input-container>
             </div>
 
@@ -121,11 +143,7 @@
                     </div>
 
                 </div>
-                <md-input-container style="width: 100%">
-                    <label>Descripción</label>
-                    <textarea type="text" rows="3" ng-model="route.concession_route.description" maxlength="150" md-maxlength="150"></textarea>
-                    <div class="hint-error">Opcional, máx. 150 caracteres</div>
-                </md-input-container>
+
             </div>
 
             <div ng-if="routeTypeEquals('private')">
@@ -184,13 +202,6 @@
 
                     </div>
                 </div>
-                <div layout="row">
-                    <md-input-container style="width: 100%">
-                        <label>Descripción</label>
-                        <textarea type="text" rows="3" ng-model="route.private_route.description" maxlength="150" md-maxlength="150"></textarea>
-                        <div class="hint-error">Opcional, máx. 150 caracteres</div>
-                    </md-input-container>
-                </div>
                 <br>
 
 
@@ -240,13 +251,6 @@
 
                     </div>
                 </div>
-                <div layout="row">
-                    <md-input-container style="width: 100%">
-                        <label>Descripción</label>
-                        <textarea type="text" rows="3" ng-model="route.site.description" maxlength="150" md-maxlength="150"></textarea>
-                        <div class="hint-error">Opcional, máx. 150 caracteres</div>
-                    </md-input-container>
-                </div>
 
 
             </div>
@@ -280,20 +284,21 @@
             </md-input-container>
 
             <md-input-container style="width: 300px">
-                <label>Antigüedad del Vehiculo Permitida</label>
+                <label>Antigüedad del Vehículo Permitida</label>
                 <input type="number" min="0" ng-model="route.vehicle_antiquity" name="antiquity" required maxlength="3">
-                <div class="hint-error" ng-style="routeForm.antiquity.$invalid && routeForm.antiquity.$touched?{'color':'red'}:''">Obligatorio, número max 3 dígitos</div>
+                <div class="hint-error" ng-show="!routeForm.antiquity.$error.min" ng-style="routeForm.antiquity.$invalid && routeForm.antiquity.$touched?{'color':'red'}:''">Obligatorio, número máx. 3 dígitos</div>
+                <div class="hint-error" style="color:red" ng-show="routeForm.antiquity.$error.min">Por favor, seleccione un valor mayor o igual que 0.</div>
             </md-input-container>
         </md-card>
         <label ng-if="routeTypeEquals('route')" class="card-header">ASIGNAR RUTA Y PARADAS</label>
-        <label ng-if="!routeTypeEquals('route')" class="card-header">ASIGNAR UBICACIÓN</label>
+        <label ng-if="!routeTypeEquals('route')" class="card-header">MAPAS</label>
         <md-card>
             <md-button ng-if="routeTypeEquals('route')" ng-click="addPolyline()" style="width: 200px" class="md-raised md-primary">Asignar Ruta</md-button>
             <md-button ng-if="!routeTypeEquals('route')" ng-click="addLoc()" style="width: 200px" class="md-raised md-primary">Asignar ubicación</md-button>
             <md-input-container>
                 <label>Hipervínculo Google Maps</label>
                 <input type="text" ng-model="route.link" name="link" required readonly>
-                <div class="hint-error" ng-style="routeForm.link.$invalid && routeForm.link.$touched?{'color':'red'}:''">Obligatorio</div>
+                <div class="hint-error" ng-style="routeForm.link.$invalid && routeForm.link.$touched?{'color':'red'}:''">Obligatorio, máx. 500 caracteres.</div>
             </md-input-container>
             <md-input-container>
                 <label>Dimensionamiento</label>
@@ -304,15 +309,15 @@
         <label class="card-header">TIEMPOS</label>
         <md-card>
             <div layout="row">
-                <md-input-container style="width: 150px">
+                <md-input-container style="width: 200px">
                     <label>Inicio</label>
-                    <input type="text" ng-model="route.schedule_start" pattern="\d\d:\d\d" name="schedule_start" required maxlength="5">
-                    <div class="hint-error" ng-style="routeForm.schedule_start.$invalid && routeForm.schedule_start.$touched?{'color':'red'}:''">Obligatorio, HH:MM</div>
+                    <input type="text" ng-model="route.schedule_start" pattern="([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]" name="schedule_start" required maxlength="5">
+                    <div class="hint-error" ng-style="routeForm.schedule_start.$invalid && routeForm.schedule_start.$touched?{'color':'red'}:''">Obligatorio, Formato 24 horas HH:MM</div>
                 </md-input-container>
-                <md-input-container style="width: 150px" flex-offset="5">
+                <md-input-container style="width: 200px" flex-offset="5">
                     <label>Fin</label>
-                    <input type="text" ng-model="route.schedule_end" pattern="\d\d:\d\d" name="schedule_end" required maxlength="5">
-                    <div class="hint-error" ng-style="routeForm.schedule_end.$invalid && routeForm.schedule_end.$touched?{'color':'red'}:''">Obligatorio, HH:MM</div>
+                    <input type="text" ng-model="route.schedule_end" pattern="([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]" name="schedule_end" required maxlength="5">
+                    <div class="hint-error" ng-style="routeForm.schedule_end.$invalid && routeForm.schedule_end.$touched?{'color':'red'}:''">Obligatorio, Formato 24 horas HH:MM</div>
                 </md-input-container>
             </div>
             <md-input-container style="width: 200px" ng-if="routeTypeEquals('route')">
@@ -332,34 +337,41 @@
 
 
             <md-input-container ng-if="routeTypeEquals('route')">
-                <label>Tarifa Máxima</label>
+                <label>Tarifa Mínima</label>
                 <input type="number" min="0" step="any" ng-model="route.concession_route.min_rate" name="min_rate" maxlength="10" required>
-                <div class="hint-error" ng-style="routeForm.min_rate.$invalid && routeForm.min_rate.$touched?{'color':'red'}:''">Obligatorio, número max 10 dígitos</div>
+                <div class="hint-error" ng-show="!routeForm.min_rate.$error.min" ng-style="routeForm.min_rate.$invalid && routeForm.min_rate.$touched?{'color':'red'}:''">Obligatorio, número máx. 10 dígitos</div>
+                <div class="hint-error" style="color:red" ng-show="routeForm.min_rate.$error.min">Por favor, seleccione un valor mayor o igual que 0.</div>
+                <!--<div ng-messages="routeForm.min_rate.$error" >-->
+                    <!--<div  ng-message="required">dsadadasd</div>-->
+                <!--</div>-->
             </md-input-container>
             <md-input-container ng-if="routeTypeEquals('route')">
-                <label>Tarifa Mínima</label>
+                <label>Tarifa Máxima</label>
                 <input type="number" min="0" step="any" ng-model="route.concession_route.max_rate" name="max_rate" maxlength="10" required>
-                <div class="hint-error" ng-style="routeForm.max_rate.$invalid && routeForm.max_rate.$touched?{'color':'red'}:''">Obligatorio, número max 10 dígitos</div>
-
+                <div class="hint-error" ng-show="!routeForm.max_rate.$error.min"ng-style="routeForm.max_rate.$invalid && routeForm.max_rate.$touched?{'color':'red'}:''">Obligatorio, número máx. 10 dígitos</div>
+                <div class="hint-error" style="color:red" ng-show="routeForm.max_rate.$error.min">Por favor, seleccione un valor mayor o igual que 0.</div>
             </md-input-container>
 
 
             <md-input-container ng-if="routeTypeEquals('private')">
                 <label>Tarifa</label>
                 <input type="number" step="any" ng-model="route.private_route.rate" name="rate" maxlength="10" required>
-                <div class="hint-error" ng-style="routeForm.rate.$invalid && routeForm.rate.$touched?{'color':'red'}:''">Obligatorio, número max 10 dígitos</div>
+                <div class="hint-error" ng-show="!routeForm.rate.$error.min" ng-style="routeForm.rate.$invalid && routeForm.rate.$touched?{'color':'red'}:''">Obligatorio, número máx. 10 dígitos</div>
+                <div class="hint-error" style="color:red" ng-show="routeForm.rate.$error.min">Por favor, seleccione un valor mayor o igual que 0.</div>
             </md-input-container>
 
 
-            <md-input-container ng-if="routeTypeEquals('site')">
-                <label>Tarifa Máxima</label>
-                <input type="number" min="0" step="any" ng-model="route.site.min_rate" name="min_rate" maxlength="10" required>
-                <div class="hint-error" ng-style="routeForm.min_rate.$invalid && routeForm.min_rate.$touched?{'color':'red'}:''">Obligatorio, número max 10 dígitos</div>
-            </md-input-container>
             <md-input-container ng-if="routeTypeEquals('site')">
                 <label>Tarifa Mínima</label>
+                <input type="number" min="0" step="any" ng-model="route.site.min_rate" name="min_rate" maxlength="10" required>
+                <div class="hint-error" ng-show="!routeForm.min_rate.$error.min" ng-style="routeForm.min_rate.$invalid && routeForm.min_rate.$touched?{'color':'red'}:''">Obligatorio, número máx. 10 dígitos</div>
+                <div class="hint-error" style="color:red" ng-show="routeForm.min_rate.$error.min">Por favor, seleccione un valor mayor o igual que 0.</div>
+            </md-input-container>
+            <md-input-container ng-if="routeTypeEquals('site')">
+                <label>Tarifa Máxima</label>
                 <input type="number" min="0" step="any" ng-model="route.site.max_rate" name="max_rate" maxlength="10" required>
-                <div class="hint-error" ng-style="routeForm.max_rate.$invalid && routeForm.max_rate.$touched?{'color':'red'}:''">Obligatorio, número max 10 dígitos</div>
+                <div class="hint-error" ng-show="!routeForm.max_rate.$error.min" ng-style="routeForm.max_rate.$invalid && routeForm.max_rate.$touched?{'color':'red'}:''">Obligatorio, número máx. 10 dígitos</div>
+                <div class="hint-error" style="color:red" ng-show="routeForm.max_rate.$error.min">Por favor, seleccione un valor mayor o igual que 0.</div>
             </md-input-container>
 
 

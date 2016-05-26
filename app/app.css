@@ -188,3 +188,7 @@ md-card{
     width: 10em !important;
 }
 
+button[disabled] md-icon{
+    color:#ccc !important;
+}
+

@@ -30,7 +30,6 @@ angular.module('myApp.manage', ['ngRoute']).config([
     //         console.log(e);
     //     });
     // };
-    
 
 
     switch($routeParams.type)
@@ -66,7 +65,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
                 if(response.response_code == 200)
                 {
                     $scope.route = response.route;
-                    $scope.vehicleKey = $scope.route.vehicle_typeId+"-"+$scope.route.vehicle_classId;
+                    $scope.vehicleKey = $scope.route.vehicle_typeId + "-" + $scope.route.vehicle_classId;
                     $('#preview').attr('src', $scope.route.image);
                     $scope.$digest();
 
@@ -102,11 +101,11 @@ angular.module('myApp.manage', ['ngRoute']).config([
             $scope.route.concession_route.polyline = data.polyline;
             $scope.route.concession_route.stops = data.stops;
 
-            toDataUrl(data.lowResUrl,function(result)
+            toDataUrl(data.lowResUrl, function(result)
             {
                 $scope.route.lowResMap = result;
             });
-            toDataUrl(data.highResUrl,function(result)
+            toDataUrl(data.highResUrl, function(result)
             {
                 $scope.route.highResMap = result;
             });
@@ -124,11 +123,11 @@ angular.module('myApp.manage', ['ngRoute']).config([
         }).then(function(data)
         {
             $scope.route.link = data.highResUrl;
-            toDataUrl(data.lowResUrl,function(result)
+            toDataUrl(data.lowResUrl, function(result)
             {
                 $scope.route.lowResMap = result;
             });
-            toDataUrl(data.highResUrl,function(result)
+            toDataUrl(data.highResUrl, function(result)
             {
                 $scope.route.highResMap = result;
             });
@@ -137,13 +136,15 @@ angular.module('myApp.manage', ['ngRoute']).config([
     };
 
 
-
-    function toDataUrl(url, callback){
+    function toDataUrl(url, callback)
+    {
         var xhr = new XMLHttpRequest();
         xhr.responseType = 'blob';
-        xhr.onload = function() {
-            var reader  = new FileReader();
-            reader.onloadend = function () {
+        xhr.onload = function()
+        {
+            var reader = new FileReader();
+            reader.onloadend = function()
+            {
                 callback(reader.result);
             };
             reader.readAsDataURL(xhr.response);
@@ -169,18 +170,28 @@ angular.module('myApp.manage', ['ngRoute']).config([
                 {
                     if(response.response_code == 200)
                     {
-
                         $scope.$apply(function()
                         {
                             $mdDialog.show(
                                 $mdDialog.alert()
                                 .clickOutsideToClose(true)
-                                .title('Ruta Agregada')
+                                .title($scope.route.type == 2 ? 'Ruta Agregada' : $scope.route.type == 1 ? 'Sitio Agregado' : 'Privado Agregado')
                                 .ariaLabel('Dialog route added')
                                 .ok('Aceptar')
                             );
                             $location.path('/routes/' + $scope.route.type);
                         });
+                    }
+                    else if(response.response_code == 400)
+                    {
+                        $mdDialog.show(
+                            $mdDialog.alert()
+                            .clickOutsideToClose(true)
+                            .title('Error al guardar')
+                            .textContent('Error en el parámetro: ' + $scope.translateKey(Object.keys(response.response_message)[0]))
+                            .ariaLabel('Alguno de los parámetros es inválido')
+                            .ok('Aceptar')
+                        );
                     }
                     else
                     {
@@ -230,12 +241,23 @@ angular.module('myApp.manage', ['ngRoute']).config([
                             $mdDialog.show(
                                 $mdDialog.alert()
                                 .clickOutsideToClose(true)
-                                .title('Ruta Guardada')
+                                .title($scope.route.type == 2 ? 'Ruta Guardada' : $scope.route.type == 1 ? 'Sitio Guardado' : 'Privado Guardado')
                                 .ariaLabel('Dialog route added')
                                 .ok('Aceptar')
                             );
                             $location.path('/routes/' + $scope.route.type);
                         });
+                    }
+                    else if(response.response_code == 400)
+                    {
+                        $mdDialog.show(
+                            $mdDialog.alert()
+                            .clickOutsideToClose(true)
+                            .title('Error al guardar')
+                            .textContent('Error en el parámetro: ' + $scope.translateKey(Object.keys(response.response_message)[0]))
+                            .ariaLabel('Alguno de los parámetros es inválido')
+                            .ok('Aceptar')
+                        );
                     }
                     else
                     {
@@ -378,7 +400,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
                         $scope.vehicles[(vehicle.id + "-" + vehicle.class)] = vehicle;
                     });
 
-                    
+
                 });
             }
         });
@@ -420,19 +442,71 @@ angular.module('myApp.manage', ['ngRoute']).config([
 
     $scope.isFormValid = function()
     {
-        return $scope.routeForm.$valid && $scope.route.image != '';
+        return $scope.routeForm.$valid;
     };
 
 
-
-
-    $scope.filterVehicles = function(vehicles,classId) {
+    $scope.filterVehicles = function(vehicles, classId)
+    {
         var result = {};
-        angular.forEach(vehicles, function(vehicle, key) {
-            if (vehicle.class == classId) {
+        angular.forEach(vehicles, function(vehicle, key)
+        {
+            if(vehicle.class == classId)
+            {
                 result[key] = vehicle;
             }
         });
         return result;
+    };
+
+
+    $scope.translateKey = function(key)
+    {
+        return key in keys ? keys[key] : key;
+    };
+
+    var keys =
+    {
+        "route.key": "Clave mnemotécnica",
+        "route.name": "Nombre",
+        "route.itinerary": "Itinerario",
+        "route.localityId": "Localidad",
+        "route.municipalityId": "Minicipio",
+        "route.link": "Mapa",
+        "route.sizing": "Dimensionamiento",
+        "route.notes": "Observaciones",
+        "route.vehicle_classId": "Clase de vehículo",
+        "route.vehicle_typeId": "Tipo de vehículo",
+        "route.vehicle_antiquity": "Antigüedad de vehículo",
+        "route.schedule_start": "Inicio",
+        "route.schedule_end": "Fin",
+        "route.concession_route.length": "Longitud",
+        "route.concession_route.duration": "Tiempo de recorrido",
+        "route.concession_route.frequency": "Frecuencia",
+        "route.concession_route.min_rate": "Tarifa mínima",
+        "route.concession_route.max_rate": "Tarifa máxima",
+        "route.concession_route.polyline": "Mapa de la ruta",
+        "route.concession_route.stops": "Paradas",
+        "route.site.generator": "Generador",
+        "route.site.atractor": "Atractor",
+        "route.site.users_benefit": "Usuarios Beneficiados",
+        "route.site.frequency": "Frecuencia",
+        "route.site.min_rate": "Tarifa mínima",
+        "route.site.max_rate": "Tarifa máxima",
+        "route.private_route.generator": "Generador",
+        "route.private_route.atractor": "Atractor",
+        "route.private_route.users_benefit": "Usuarios beneficiados",
+        "route.private_route.rate": "Tarífa",
+        "route.private_route.concessions": "Concesiones",
+        "route.private_route.service_units": "Unidades óptimas para el servicio"
+
     }
 });
+
+
+
+
+
+
+
+
