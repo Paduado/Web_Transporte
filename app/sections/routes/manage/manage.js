@@ -143,6 +143,8 @@ angular.module('myApp.manage', ['ngRoute']).config([
     {
         if($routeParams.route_key == "new")
         {
+            if($scope.route.type == 2)
+                $scope.route.concession_route.route_typeId = parseInt($scope.route.concession_route.route_typeId);
             $.post(webtransporte + '/admin/new/route',
                 {
                     public_key: localStorage.getItem('public_key'),
@@ -169,7 +171,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
                             $mdDialog.alert()
                             .clickOutsideToClose(true)
                             .title('Error al guardar')
-                            .textContent($scope.getErrorMessage(response.message))
+                            .textContent($scope.getErrorMessage(response.response_message))
                             .ariaLabel('Alguno de los parámetros es inválido')
                             .ok('Aceptar')
                         );
@@ -207,6 +209,9 @@ angular.module('myApp.manage', ['ngRoute']).config([
         else
         {
             $scope.route.type = $scope.getRouteType();
+
+            if($scope.route.type == 2)
+                $scope.route.concession_route.route_typeId = parseInt($scope.route.concession_route.route_typeId);
             $.post(webtransporte + '/admin/update/route',
                 {
                     public_key: localStorage.getItem('public_key'),
@@ -235,7 +240,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
                             $mdDialog.alert()
                             .clickOutsideToClose(true)
                             .title('Error al guardar')
-                            .textContent($scope.getErrorMessage(response.message))
+                            .textContent($scope.getErrorMessage(response.response_message))
                             .ariaLabel('Alguno de los parámetros es inválido')
                             .ok('Aceptar')
                         );
@@ -445,13 +450,13 @@ angular.module('myApp.manage', ['ngRoute']).config([
         });
         return result;
     };
-    
+
     
     $scope.getErrorMessage = function(message)
     {
-        if(message instanceof Array)
+        if(message instanceof Object)
         {
-            var key = Object.keys(response.response_message)[0];
+            var key = Object.keys(message)[0];
             return key in keys ? keys[key] : key;
         }
         else
