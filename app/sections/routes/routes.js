@@ -210,12 +210,12 @@ angular.module('myApp.routes', ['ngRoute']).config([
     {
         switch(type)
         {
-            case 1:
-                return "Autobús"
-            case 2:
-                return "Colector"
-            case 3:
-                return "TuzoBús"
+            case '1':
+                return "Autobús";
+            case '2':
+                return "Colector";
+            case '3':
+                return "TuzoBús";
         }
     };
 
