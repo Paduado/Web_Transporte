@@ -61,7 +61,7 @@ angular.module('myApp.users', ['ngRoute']).config([
             parent: angular.element(document.body),
             clickOutsideToClose: true,
             fullscreen: false,
-            controller: function($scope, $mdDialog)
+            controller: function($scope, $mdDialog, $timeout)
             {
                 $scope.user = {
                     name: "",
@@ -70,6 +70,8 @@ angular.module('myApp.users', ['ngRoute']).config([
                     password: ""
                 };
 
+                $scope.userError = false;
+
                 $scope.cancel = function()
                 {
                     $mdDialog.cancel();
@@ -77,43 +79,53 @@ angular.module('myApp.users', ['ngRoute']).config([
 
                 $scope.save = function()
                 {
-                    $mdDialog.hide($scope.user);
-                };
-            }
-        }).then(function(user)
-        {
-            user.public_key = localStorage.getItem('public_key');
 
-            $.post(webtransporte + '/admin/new/user', user,
-                function(response)
-                {
-                    if(response.response_code == 200)
-                    {
-                        $scope.getUsers();
-                    }
-                    else
+                    $scope.user.public_key = localStorage.getItem('public_key');
+
+                    $.post(webtransporte + '/admin/new/user', $scope.user,
+                        function(response)
+                        {
+                            if(response.response_code == 200)
+                            {
+                                $mdDialog.hide();
+                            }
+                            else if(response.response_code == 422)
+                            {
+                                $scope.userError = true;
+                                $scope.$digest();
+                                $timeout(function()
+                                {
+                                    $scope.userError = false;
+                                }, 4000)
+                            }
+                            else
+                            {
+                                $mdDialog.show(
+                                    $mdDialog.alert()
+                                    .clickOutsideToClose(true)
+                                    .title('Error al crear el usuario')
+                                    .ariaLabel('Dialog route error')
+                                    .ok('Aceptar')
+                                );
+                            }
+                            console.log(response);
+                        }, 'json')
+                    .fail(function()
                     {
                         $mdDialog.show(
                             $mdDialog.alert()
                             .clickOutsideToClose(true)
-                            .title('Error al crear el usuario')
-                            .ariaLabel('Dialog route error')
+                            .title('Error en el servidor')
+                            .textContent('Contacte al administrador.')
+                            .ariaLabel('Dialog login error')
                             .ok('Aceptar')
                         );
-                    }
-                    console.log(response);
-                }, 'json')
-            .fail(function()
-            {
-                $mdDialog.show(
-                    $mdDialog.alert()
-                    .clickOutsideToClose(true)
-                    .title('Error en el servidor')
-                    .textContent('Contacte al administrador.')
-                    .ariaLabel('Dialog login error')
-                    .ok('Aceptar')
-                );
-            });
+                    });
+                };
+            }
+        }).then(function()
+        {
+            $scope.getUsers();
         });
 
 
@@ -140,6 +152,8 @@ angular.module('myApp.users', ['ngRoute']).config([
                     type: user.level
                 };
 
+                $scope.userError = false;
+
                 $scope.cancel = function()
                 {
                     $mdDialog.cancel();
@@ -149,101 +163,100 @@ angular.module('myApp.users', ['ngRoute']).config([
                 {
                     if($scope.updatePass)
                         $scope.user.password = $scope.password;
-                    $mdDialog.hide({
-                        user: $scope.user,
-                        command: "save"
+
+                    $scope.user.public_key = localStorage.getItem('public_key');
+                    $.post(webtransporte + '/admin/update/user', $scope.user,
+                        function(response)
+                        {
+                            if(response.response_code == 200)
+                            {
+                                $mdDialog.hide();
+                            }
+                            else if(response.response_code == 422)
+                            {
+                                $scope.userError = true;
+                                $scope.$digest();
+                                $timeout(function()
+                                {
+                                    $scope.userError = false;
+                                }, 4000)
+                            }
+                            else
+                            {
+                                $mdDialog.show(
+                                    $mdDialog.alert()
+                                    .clickOutsideToClose(true)
+                                    .title('Error al guardar el usuario')
+                                    .ariaLabel('Dialog route error')
+                                    .ok('Aceptar')
+                                );
+                            }
+                            console.log(response);
+                        }, 'json')
+                    .fail(function()
+                    {
+                        $mdDialog.show(
+                            $mdDialog.alert()
+                            .clickOutsideToClose(true)
+                            .title('Error en el servidor')
+                            .textContent('Contacte al administrador.')
+                            .ariaLabel('Dialog login error')
+                            .ok('Aceptar')
+                        );
                     });
+
                 };
-                
+
                 $scope.delete = function()
                 {
-                    $mdDialog.hide({
-                        user: $scope.user,
-                        command: "delete"
+
+                    $.post(webtransporte + '/admin/delete/user',
+                        {
+                            public_key: localStorage.getItem('public_key'),
+                            user_id: $scope.user.user_id
+                        },
+                        function(response)
+                        {
+                            if(response.response_code == 200)
+                            {
+                                $mdDialog.hide();
+                            }
+                            else
+                            {
+                                $mdDialog.show(
+                                    $mdDialog.alert()
+                                    .clickOutsideToClose(true)
+                                    .title('Error al eliminar el usuario')
+                                    .ariaLabel('Dialog route error')
+                                    .ok('Aceptar')
+                                );
+                            }
+                            console.log(response);
+                        }
+                        ,
+                        'json'
+                    )
+                    .fail(function()
+                    {
+                        $mdDialog.show(
+                            $mdDialog.alert()
+                            .clickOutsideToClose(true)
+                            .title('Error en el servidor')
+                            .textContent('Contacte al administrador.')
+                            .ariaLabel('Dialog login error')
+                            .ok('Aceptar')
+                        );
                     });
                 };
             }
-        }).then(function(data)
+        }).then(function()
         {
-            if(data.command == 'save')
-            {
-                data.user.public_key = localStorage.getItem('public_key');
-                $.post(webtransporte + '/admin/update/user', data.user,
-                    function(response)
-                    {
-                        if(response.response_code == 200)
-                        {
-                            $scope.getUsers();
-                        }
-                        else
-                        {
-                            $mdDialog.show(
-                                $mdDialog.alert()
-                                .clickOutsideToClose(true)
-                                .title('Error al guardar el usuario')
-                                .ariaLabel('Dialog route error')
-                                .ok('Aceptar')
-                            );
-                        }
-                        console.log(response);
-                    }, 'json')
-                .fail(function()
-                {
-                    $mdDialog.show(
-                        $mdDialog.alert()
-                        .clickOutsideToClose(true)
-                        .title('Error en el servidor')
-                        .textContent('Contacte al administrador.')
-                        .ariaLabel('Dialog login error')
-                        .ok('Aceptar')
-                    );
-                });
-            }
-            else if(data.command == 'delete')
-            {
-                $.post(webtransporte + '/admin/delete/user',
-                    {
-                        public_key: localStorage.getItem('public_key'),
-                        user_id:data.user.id
-                    },
-                    function(response)
-                    {
-                        if(response.response_code == 200)
-                        {
-                            $scope.getUsers();
-                        }
-                        else
-                        {
-                            $mdDialog.show(
-                                $mdDialog.alert()
-                                .clickOutsideToClose(true)
-                                .title('Error al eliminar el usuario')
-                                .ariaLabel('Dialog route error')
-                                .ok('Aceptar')
-                            );
-                        }
-                        console.log(response);
-                    }
-                    ,
-                    'json'
-                )
-                .fail(function()
-                {
-                    $mdDialog.show(
-                        $mdDialog.alert()
-                        .clickOutsideToClose(true)
-                        .title('Error en el servidor')
-                        .textContent('Contacte al administrador.')
-                        .ariaLabel('Dialog login error')
-                        .ok('Aceptar')
-                    );
-                });
-            }
+            $scope.getUsers();
 
         });
     };
-    
-    
+
+
     $scope.getLevelString = function(level)
     {
         switch(level)

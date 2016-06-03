@@ -12,10 +12,12 @@ p {
 }
 
 body {
-    width: 100vw;
     height: 100vh;
     overflow: hidden;
     font-family: Roboto-Regular;
+    position: fixed;
+    width: 100%;
+    top: 0px;
 }
 
 

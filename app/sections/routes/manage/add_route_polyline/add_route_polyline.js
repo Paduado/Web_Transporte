@@ -181,8 +181,8 @@ angular.module('myApp.add_route_polyline', ['ngRoute']).config([
         $scope.accept = function ()
         {
             var polyline = google.maps.geometry.encoding.encodePath(poly.getPath());
-            var lowResUrl =  "https://maps.googleapis.com/maps/api/staticmap?size=320x240&zoom=15&scale=1&path=color:0xFF0000FF|weight:2|enc:" + polyline;
-            var highResUrl = "https://maps.googleapis.com/maps/api/staticmap?size=640x360&zoom=14&scale=2&path=color:0xFF0000FF|weight:2|enc:"+ polyline;
+            var lowResUrl =  "https://maps.googleapis.com/maps/api/staticmap?size=320x240&scale=1&path=color:0xFF0000FF|weight:2|enc:" + polyline;
+            var highResUrl = "https://maps.googleapis.com/maps/api/staticmap?size=640x360&scale=2&path=color:0xFF0000FF|weight:2|enc:"+ polyline;
             var stops = [];
             for (var i = 0; i < markers.length; i++)
             {

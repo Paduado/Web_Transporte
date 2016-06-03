@@ -1,20 +1,21 @@
 angular.module('myApp.login', ['ngRoute']).config([
-    '$routeProvider', function ($routeProvider)
+    '$routeProvider', function($routeProvider)
     {
         $routeProvider.when('/login', {
             templateUrl: 'login/login.html',
             controller: 'loginCtrl'
         });
     }
-]).controller('loginCtrl', function ($scope, $location, $mdDialog,$interval,$rootScope)
+]).controller('loginCtrl', function($scope, $location, $mdDialog, $interval, $rootScope)
 {
     //$('.main_container').addClass('login-background');
 
-
+    // $scope.user = '';
+    // $scope.password = '';
 
     $scope.loading = false;
 
-    $scope.login = function ()
+    $scope.login = function()
     {
         $scope.loading = true;
         $.post(webtransporte + '/admin/login',
@@ -22,12 +23,12 @@ angular.module('myApp.login', ['ngRoute']).config([
                 username: $scope.user,
                 password: $scope.password
             },
-            function (response)
+            function(response)
             {
                 $scope.loading = false;
-                if (response.response_code == 200)
+                if(response.response_code == 200)
                 {
-                    $scope.$apply(function ()
+                    $scope.$apply(function()
                     {
                         localStorage.setItem('public_key', response.user.public_key);
                         localStorage.setItem('username', response.user.username);
@@ -45,26 +46,52 @@ angular.module('myApp.login', ['ngRoute']).config([
                 {
                     $mdDialog.show(
                         $mdDialog.alert()
-                            .clickOutsideToClose(true)
-                            .title('Error al iniciar sesión')
-                            .textContent('Verifique su usuario o contraseña.')
-                            .ariaLabel('Dialog login error')
-                            .ok('Aceptar')
+                        .clickOutsideToClose(true)
+                        .title('Error al iniciar sesión')
+                        .textContent('Verifique su usuario o contraseña.')
+                        .ariaLabel('Dialog login error')
+                        .ok('Aceptar')
                     );
                 }
             }, 'json')
-            .fail(function ()
+        .fail(function()
+        {
+            $scope.loading = false;
+            $mdDialog.show(
+                $mdDialog.alert()
+                .clickOutsideToClose(true)
+                .title('Error en el servidor')
+                .textContent('Contacte al administrador.')
+                .ariaLabel('Dialog login error')
+                .ok('Aceptar')
+            );
+        });
+
+
+    };
+
+
+    $scope.forgotPass = function()
+    {
+
+        if($scope.user != '')
+        {
+            $mdDialog.show(
+                $mdDialog.confirm()
+                .clickOutsideToClose(true)
+                .title('Recuperar')
+                .textContent('Se enviara un correo al correo del usuario: ' + $scope.user)
+                .ariaLabel('Dialog login error')
+                .ok('Enviar')
+                .cancel('cancelar')
+            ).then(function()
             {
-                $scope.loading = false;
-                $mdDialog.show(
-                    $mdDialog.alert()
-                        .clickOutsideToClose(true)
-                        .title('Error en el servidor')
-                        .textContent('Contacte al administrador.')
-                        .ariaLabel('Dialog login error')
-                        .ok('Aceptar')
-                );
+                $.post(webtransporte + '/admin/recover/password', {
+                    username: $scope.user
+                });
             });
+        }
+
 
 
     };

@@ -43,6 +43,11 @@
                     return parseInt(localStorage.getItem('level'));
                 };
 
+                $scope.logout = function()
+                {
+                    localStorage.clear();
+                    $location.path('/login');
+                };
 
                 
             },

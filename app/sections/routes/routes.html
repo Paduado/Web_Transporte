@@ -13,10 +13,10 @@
             Autobús
         </md-checkbox>
         <md-checkbox flex="30" class="md-primary" ng-change="page = 1" ng-init="checkType2 = true" ng-model="checkType2" aria-label="Checkbox 1">
-            TuzoBús Alimentadora
+            Colector
         </md-checkbox>
         <md-checkbox flex="30" class="md-primary" ng-change="page = 1" ng-init="checkType3 = true" ng-model="checkType3" aria-label="Checkbox 1">
-            TuzoBús Truncal
+            TuzoBús
         </md-checkbox>
     </div>
     <br>
@@ -63,7 +63,7 @@
             </td>
             <td ng-click="order('status')" style="width: 7%">ESTATUS<span><md-icon ng-style="predicate == 'status'?{'visibility':'visible'}:{'visibility':'hidden'}" ng-class="{invert:reverse}" class="sort-arrow" md-svg-src="md-toggle-arrow"></md-icon></span>
             </td>
-            <td ng-if="getUserLevel() > 10" style="width: 7%">EDITAR
+            <td  style="width: 7%">EDITAR
             </td>
         </tr>
         </thead>

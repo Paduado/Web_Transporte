@@ -14,3 +14,13 @@
     z-index: 1;
     padding: 8px;
 }
+
+.forgot-password{
+    color:white;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.forgot-password:hover{
+    font-weight: bold;
+}

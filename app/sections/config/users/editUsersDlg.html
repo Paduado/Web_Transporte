@@ -3,48 +3,50 @@
         <div layout="column" style="width: 400px">
             <h2>Editar Usuario</h2>
 
-            <md-input-container style="margin: 5px">
-                <label>Usuario</label>
-                <input ng-model="user.username">
-            </md-input-container>
-
-            <md-input-container style="margin: 5px">
-                <label>Nombre</label>
-                <input ng-model="user.name">
-            </md-input-container>
-
-            <md-input-container style="margin: 5px">
-                <label>Correo</label>
-                <input ng-model="user.email">
-            </md-input-container>
-
-            <md-input-container style="margin: 5px">
-                <label>Tipo</label>
-                <md-select ng-model="user.type">
-                    <md-option value="10">Administrador de lectura</md-option>
-                    <md-option value="20">Administrador de escritura</md-option>
-                    <md-option value="30">Super administrador</md-option>
-                </md-select>
-            </md-input-container>
-            <br>
-            <md-checkbox style="margin-left: 10px;margin-bottom: 0" class="md-primary" ng-init="updatePass = false" ng-model="updatePass" >Cambiar contraseña</md-checkbox>
-            <div class="edit-password-input" ng-show="updatePass">
-                <md-input-container style="margin-left: 5px;width: calc(100% - 10px)">
-                    <label>Contraseña</label>
-                    <input ng-model="password">
+            <form name="form" layout="column">
+                <md-input-container style="margin: 5px">
+                    <label>Usuario</label>
+                    <input ng-model="user.username" required>
                 </md-input-container>
-            </div>
-        </div>
+
+                <md-input-container style="margin: 5px">
+                    <label>Nombre</label>
+                    <input ng-model="user.name" required>
+                </md-input-container>
+
+                <md-input-container style="margin: 5px">
+                    <label>Correo</label>
+                    <input ng-model="user.email"  pattern="[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$" required>
+                </md-input-container>
+
+                <md-input-container style="margin: 5px">
+                    <label>Tipo</label>
+                    <md-select ng-model="user.type" required>
+                        <md-option value="10">Administrador de lectura</md-option>
+                        <md-option value="20">Administrador de escritura</md-option>
+                        <md-option value="30">Super administrador</md-option>
+                    </md-select>
+                </md-input-container>
+                <br>
+                <md-checkbox style="margin-left: 10px;margin-bottom: 0" class="md-primary" ng-init="updatePass = false" ng-model="updatePass">Cambiar contraseña</md-checkbox>
+                <div class="edit-password-input" ng-if="updatePass">
+                    <md-input-container style="margin-left: 5px;width: calc(100% - 10px)">
+                        <label>Contraseña</label>
+                        <input ng-model="password" type="password"  required>
+                    </md-input-container>
+                </div>
+            </form>
+    </md-dialog-content>
     </md-dialog-content>
     <md-dialog-actions layout="row">
-        <md-button ng-show="index != undefined" class="md-warn" ng-click="delete()">
+        <md-button  class="md-warn" ng-click="delete()">
             Eliminar
         </md-button>
         <span flex></span>
         <md-button class="md-primary" ng-click="cancel()">
             Cancelar
         </md-button>
-        <md-button ng-disabled="user.username == '' || user.name == '' || user.email == '' || user.type == '' || user.password == ''" class="md-primary" ng-click="save()">
+        <md-button ng-disabled="form.$invalid" class="md-primary" ng-click="save()">
             Guardar
         </md-button>
     </md-dialog-actions>

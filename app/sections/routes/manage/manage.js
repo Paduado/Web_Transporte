@@ -9,27 +9,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
 ]).controller('manageCtrl', function($scope, $routeParams, $mdDialog, $location)
 {
     $scope.route = {};
-
-    // $scope.test = function()
-    // {
-    //     navigator.bluetooth.requestDevice({
-    //         filters: [
-    //             {services: ['00001101-0000-1000-8000-00805f9b34fb']}
-    //         ]
-    //     })
-    //     .then(function(device)
-    //     {
-    //         return device.gatt.connect();
-    //     })
-    //     .then(function(a)
-    //     {
-    //         console.log(a);
-    //     })
-    //     .catch(function(e)
-    //     {
-    //         console.log(e);
-    //     });
-    // };
+    
 
 
     switch($routeParams.type)
@@ -52,9 +32,10 @@ angular.module('myApp.manage', ['ngRoute']).config([
             $location.path('/route');
     }
 
-
+    $scope.isNew = true;
     if($routeParams.route_key != "new")
     {
+        $scope.isNew = false;
         $.post(webtransporte + '/admin/get/route',
             {
                 public_key: localStorage.getItem('public_key'),
@@ -188,7 +169,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
                             $mdDialog.alert()
                             .clickOutsideToClose(true)
                             .title('Error al guardar')
-                            .textContent('Error en el parámetro: ' + $scope.translateKey(Object.keys(response.response_message)[0]))
+                            .textContent($scope.getErrorMessage(response.message))
                             .ariaLabel('Alguno de los parámetros es inválido')
                             .ok('Aceptar')
                         );
@@ -254,7 +235,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
                             $mdDialog.alert()
                             .clickOutsideToClose(true)
                             .title('Error al guardar')
-                            .textContent('Error en el parámetro: ' + $scope.translateKey(Object.keys(response.response_message)[0]))
+                            .textContent($scope.getErrorMessage(response.message))
                             .ariaLabel('Alguno de los parámetros es inválido')
                             .ok('Aceptar')
                         );
@@ -350,6 +331,12 @@ angular.module('myApp.manage', ['ngRoute']).config([
         });
     };
 
+    $scope.clearImg = function()
+    {
+        $scope.route.image = "";
+        $('#preview').attr('src','');
+    };
+
 
     /********************************
      get selects content
@@ -373,7 +360,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
 
 
         $.post(webtransporte + '/admin/get/municipalities', {
-            public_key: localStorage.getItem('public_key'),
+            public_key: localStorage.getItem('public_key')
         }, function(response)
         {
             if(response.response_code == 200)
@@ -458,47 +445,56 @@ angular.module('myApp.manage', ['ngRoute']).config([
         });
         return result;
     };
-
-
-    $scope.translateKey = function(key)
+    
+    
+    $scope.getErrorMessage = function(message)
     {
-        return key in keys ? keys[key] : key;
+        if(message instanceof Array)
+        {
+            var key = Object.keys(response.response_message)[0];
+            return key in keys ? keys[key] : key;
+        }
+        else
+        {
+            return message;
+        }
     };
+
 
     var keys =
     {
-        "route.key": "Clave mnemotécnica",
-        "route.name": "Nombre",
-        "route.itinerary": "Itinerario",
-        "route.localityId": "Localidad",
-        "route.municipalityId": "Minicipio",
-        "route.link": "Mapa",
-        "route.sizing": "Dimensionamiento",
-        "route.notes": "Observaciones",
-        "route.vehicle_classId": "Clase de vehículo",
-        "route.vehicle_typeId": "Tipo de vehículo",
-        "route.vehicle_antiquity": "Antigüedad de vehículo",
-        "route.schedule_start": "Inicio",
-        "route.schedule_end": "Fin",
-        "route.concession_route.length": "Longitud",
-        "route.concession_route.duration": "Tiempo de recorrido",
-        "route.concession_route.frequency": "Frecuencia",
-        "route.concession_route.min_rate": "Tarifa mínima",
-        "route.concession_route.max_rate": "Tarifa máxima",
-        "route.concession_route.polyline": "Mapa de la ruta",
-        "route.concession_route.stops": "Paradas",
-        "route.site.generator": "Generador",
-        "route.site.atractor": "Atractor",
-        "route.site.users_benefit": "Usuarios Beneficiados",
-        "route.site.frequency": "Frecuencia",
-        "route.site.min_rate": "Tarifa mínima",
-        "route.site.max_rate": "Tarifa máxima",
-        "route.private_route.generator": "Generador",
-        "route.private_route.atractor": "Atractor",
-        "route.private_route.users_benefit": "Usuarios beneficiados",
-        "route.private_route.rate": "Tarífa",
-        "route.private_route.concessions": "Concesiones",
-        "route.private_route.service_units": "Unidades óptimas para el servicio"
+        "route.key": "Error en el parámetro: Clave mnemotécnica",
+        "route.name": "Error en el parámetro: Nombre",
+        "route.itinerary": "Error en el parámetro: Itinerario",
+        "route.localityId": "Error en el parámetro: Localidad",
+        "route.municipalityId": "Error en el parámetro: Minicipio",
+        "route.link": "Error en el parámetro: Mapa",
+        "route.sizing": "Error en el parámetro: Dimensionamiento",
+        "route.notes": "Error en el parámetro: Observaciones",
+        "route.vehicle_classId": "Error en el parámetro: Clase de vehículo",
+        "route.vehicle_typeId": "Error en el parámetro: Tipo de vehículo",
+        "route.vehicle_antiquity": "Error en el parámetro: Antigüedad de vehículo",
+        "route.schedule_start": "Error en el parámetro: Inicio",
+        "route.schedule_end": "Error en el parámetro: Fin",
+        "route.concession_route.length": "Error en el parámetro: Longitud",
+        "route.concession_route.duration": "Error en el parámetro: Tiempo de recorrido",
+        "route.concession_route.frequency": "Error en el parámetro: Frecuencia",
+        "route.concession_route.min_rate": "Error en el parámetro: Tarifa mínima",
+        "route.concession_route.max_rate": "Error en el parámetro: Tarifa máxima",
+        "route.concession_route.polyline": "Error en el parámetro: Mapa de la ruta",
+        "route.concession_route.stops": "La ruta debe de tener al menos una parada",
+        "route.site.generator": "Error en el parámetro: Generador",
+        "route.site.atractor": "Error en el parámetro: Atractor",
+        "route.site.users_benefit": "Error en el parámetro: Usuarios Beneficiados",
+        "route.site.frequency": "Error en el parámetro: Frecuencia",
+        "route.site.min_rate": "Error en el parámetro: Tarifa mínima",
+        "route.site.max_rate": "Error en el parámetro: Tarifa máxima",
+        "route.private_route.generator": "Error en el parámetro: Generador",
+        "route.private_route.atractor": "Error en el parámetro: Atractor",
+        "route.private_route.users_benefit": "Error en el parámetro: Usuarios beneficiados",
+        "route.private_route.rate": "Error en el parámetro: Tarífa",
+        "route.private_route.concessions": "Error en el parámetro: Concesiones",
+        "route.private_route.service_units": "Error en el parámetro: Unidades óptimas para el servicio"
 
     }
 });

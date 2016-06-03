@@ -1,5 +1,5 @@
 'use strict';
-var webtransporte = "http://transportetuzobus.us-east-1.elasticbeanstalk.com";
+var webtransporte = "http://192.168.22.2:90/Servicios/PanelControl/index.php";
 //var webtransporte = "http://148.239.50.191:80";
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
@@ -46,7 +46,7 @@ angular.module('myApp', [
     });
 
 
-    $rootScope.logout = function()
+    $rootScope.exit = function()
     {
         localStorage.clear();
         $mdDialog.show(
@@ -72,13 +72,13 @@ angular.module('myApp', [
             {
                 if(response.response_code != 200)
                 {
-                    $rootScope.logout();
+                    $rootScope.exit();
                 }
 
             }, 'json').fail(function(error)
             {
                 if(error.status == 401)
-                    $rootScope.logout();
+                    $rootScope.exit();
             });
         }
     }, 10000);
@@ -129,6 +129,5 @@ angular.module('myApp', [
     $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.withCredentials = true;
     delete $httpProvider.defaults.headers.common["X-Requested-With"];
-    $httpProvider.defaults.headers.common["Accept"] = "application/json";
     $httpProvider.defaults.headers.common["Content-Type"] = "application/json";
 });

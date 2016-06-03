@@ -5,17 +5,17 @@
     <div layout="row" layout-align="center" style="margin-top: 40px">
 
         <div layout="column">
-            <input ng-model="user" placeholder="Usuario" class="login-input">
-            <input ng-model="password" type="password" placeholder="Contraseña" class="login-input">
+            <input ng-model="user" ng-init="user = ''" placeholder="Usuario" class="login-input">
+            <input ng-model="password"  type="password" placeholder="Contraseña" class="login-input">
             <div layout="row" layout-align="center">
-                <md-button ng-click="login()" ng-disabled="email == '' || password == ''" style="z-index: 1;width: 150px" class="md-raised md-primary">
+                <md-button ng-click="login()" ng-disabled="user == '' || password == ''" style="z-index: 1;width: 150px" class="md-raised md-primary">
                     <div ng-if="loading" layout="row" layout-align="center">
                         <md-progress-circular class="md-accent" md-mode="indeterminate"></md-progress-circular>
                     </div>
                     <label ng-if="!loading">Iniciar Sesión</label>
                 </md-button>
             </div>
-            <!--<a></a>-->
+            <div ng-click="forgotPass()"  class="forgot-password" align="center">Olvidé mi contraseña</div>
         </div>
     </div>
 </div>

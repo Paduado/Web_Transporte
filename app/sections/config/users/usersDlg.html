@@ -2,35 +2,37 @@
     <md-dialog-content class="md-dialog-content">
         <div layout="column" style="width: 400px">
             <h2>Crear usuario</h2>
+            <form name="form" layout="column">
+                <md-input-container style="margin: 5px">
+                    <label>Usuario</label>
+                    <input ng-model="user.username" required autocomplete="off">
+                    <div ng-show="userError" style="font-size: .7em;color: red">El usuario ya existe</div>
+                </md-input-container>
 
-            <md-input-container style="margin: 5px">
-                <label>Usuario</label>
-                <input  ng-model="user.username">
-            </md-input-container>
+                <md-input-container style="margin: 5px">
+                    <label>Nombre</label>
+                    <input ng-model="user.name" required autocomplete="off">
+                </md-input-container>
 
-            <md-input-container style="margin: 5px">
-                <label>Nombre</label>
-                <input  ng-model="user.name">
-            </md-input-container>
+                <md-input-container style="margin: 5px">
+                    <label>Correo</label>
+                    <input ng-model="user.email" pattern="[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$" required autocomplete="off">
+                </md-input-container>
 
-            <md-input-container style="margin: 5px">
-                <label>Correo</label>
-                <input  ng-model="user.email">
-            </md-input-container>
-
-            <md-input-container style="margin: 5px">
-                <label>Contraseña</label>
-                <input  ng-model="user.password">
-            </md-input-container>
-
-            <md-input-container style="margin: 5px">
-                <label>Tipo</label>
-                <md-select ng-model="user.type" >
-                    <md-option value="10">Administrador de lectura</md-option>
-                    <md-option value="20">Administrador de escritura</md-option>
-                    <md-option value="30">Super administrador</md-option>
-                </md-select>
-            </md-input-container>
+                <md-input-container style="margin: 5px">
+                    <label>Tipo</label>
+                    <md-select ng-model="user.type" required autocomplete="off">
+                        <md-option value="10">Administrador de lectura</md-option>
+                        <md-option value="20">Administrador de escritura</md-option>
+                        <md-option value="30">Super administrador</md-option>
+                    </md-select>
+                </md-input-container>
+                <br>
+                <md-input-container style="margin: 5px;">
+                    <label>Contraseña</label>
+                    <input ng-model="user.password" type="password" required autocomplete="off">
+                </md-input-container>
+            </form>
         </div>
     </md-dialog-content>
     <md-dialog-actions layout="row">
@@ -41,7 +43,7 @@
         <md-button class="md-primary" ng-click="cancel()">
             Cancelar
         </md-button>
-        <md-button ng-disabled="user.username == '' || user.name == '' || user.email == '' || user.type == '' || user.password == ''" class="md-primary" ng-click="save()">
+        <md-button ng-disabled="form.$invalid" class="md-primary" ng-click="save()">
             Guardar
         </md-button>
     </md-dialog-actions>

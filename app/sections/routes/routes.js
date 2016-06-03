@@ -213,9 +213,9 @@ angular.module('myApp.routes', ['ngRoute']).config([
             case 1:
                 return "Autobús"
             case 2:
-                return "TuzoBús Alimentadora"
+                return "Colector"
             case 3:
-                return "TuzoBús Truncal"
+                return "TuzoBús"
         }
     };
 

@@ -2,7 +2,7 @@
         <div layout="column" flex="100" layout-align="center center">
             <input class="notification-input" placeholder="Mensaje" ng-model="body" ng-init="body = ''">
 
-            <md-button ng-disabled="getUserLevel() < 20" ng-click="sendPush()" ng-disabled="body == ''" class="md-raised md-primary" style="width: 200px">Enviar</md-button>
+            <md-button ng-disabled="getUserLevel() < 20 || body == ''" ng-click="sendPush()" ng-disabled="body == ''" class="md-raised md-primary" style="width: 200px">Enviar</md-button>
         </div>
 
 

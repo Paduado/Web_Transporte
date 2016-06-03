@@ -7,7 +7,7 @@
         <md-button ng-click="saveRoute()" ng-disabled="!isFormValid()" class="md-raised gray-btn">Guardar</md-button>
     </div>
     <!--<div layout="column" flex-offset="5">-->
-        <!--<md-button ng-click="saveRoute()"  class="md-raised gray-btn">Guardar</md-button>-->
+    <!--<md-button ng-click="saveRoute()"  class="md-raised gray-btn">Guardar</md-button>-->
     <!--</div>-->
 </div>
 <div style="overflow: auto;height: calc(100% - 90px);padding: 1em;box-sizing: border-box">
@@ -39,9 +39,9 @@
                         <input type="text" name="name" ng-model="route.name" required maxlength="20">
                         <div class="hint-error" ng-style="routeForm.name.$invalid && routeForm.name.$touched?{'color':'red'}:''">Obligatorio, máx. 20 caracteres</div>
                     </md-input-container>
-                    <md-input-container>
+                    <md-input-container >
                         <label>Clave mnemotécnica</label>
-                        <input type="text" name="key" ng-model="route.key" required maxlength="20">
+                        <input ng-disabled="!isNew" type="text" name="key" ng-model="route.key" required maxlength="20">
                         <div class="hint-error" ng-style="routeForm.key.$invalid && routeForm.key.$touched?{'color':'red'}:''">Obligatorio, máx. 20 caracteres</div>
                     </md-input-container>
                     <md-input-container>
@@ -122,20 +122,21 @@
                         </md-input-container>
 
                         <label style="margin-bottom: .5em">Terreno:</label>
-                        <md-radio-group ng-init="route.concession_route.ground = 5" ng-model="route.concession_route.ground" ng-change="groundChanged()">
+                        <md-radio-group  ng-model="route.concession_route.ground" ng-change="groundChanged()">
                             <md-radio-button value="5" class="md-primary">Pavimento</md-radio-button>
                             <md-radio-button value="6" class="md-primary"> Terracería</md-radio-button>
                         </md-radio-group>
 
                     </div>
                     <div layout="column" flex-offset="25">
-                        <md-input-container>
+                        <md-input-container style="width: 200px">
                             <label>Tiempo de recorrido</label>
-                            <input type="text" step="any" ng-model="route.concession_route.duration" name="time" required maxlength="50">
-                            <div class="hint-error" ng-style="routeForm.time.$invalid && routeForm.time.$touched?{'color':'red'}:''">Obligatorio, máx. 50 caracteres</div>
+                            <input type="text"  ng-model="route.concession_route.duration" pattern="([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]" name="time" required maxlength="5">
+                            <div class="hint-error" ng-style="routeForm.time.$invalid && routeForm.time.$touched?{'color':'red'}:''">Obligatorio, Formato 24 horas HH:MM</div>
                         </md-input-container>
+
                         <label style="margin-bottom: .5em">Tramo:</label>
-                        <md-radio-group ng-init="route.concession_route.road = 7" ng-model="route.concession_route.road" ng-change="roadChanged()">
+                        <md-radio-group  ng-model="route.concession_route.road" ng-change="roadChanged()">
                             <md-radio-button value="7" class="md-primary">Estatal</md-radio-button>
                             <md-radio-button value=8 class="md-primary"> Federal</md-radio-button>
                         </md-radio-group>
@@ -162,9 +163,9 @@
                         </md-input-container>
 
                         <md-input-container>
-                            <label>Concesiones</label>
-                            <input type="text" ng-model="route.private_route.concessions" name="concessions" required maxlength="100">
-                            <div class="hint-error" ng-style="routeForm.concessions.$invalid && routeForm.concessions.$touched?{'color':'red'}:''">Obligatorio, máx. 100 caracteres</div>
+                            <label>Concesionadas</label>
+                            <input type="text" ng-model="route.private_route.concessions" name="concessions" maxlength="100">
+                            <div class="hint-error" ng-style="routeForm.concessions.$invalid && routeForm.concessions.$touched?{'color':'red'}:''">Opcional, máx. 100 caracteres</div>
                         </md-input-container>
 
 
@@ -188,11 +189,7 @@
                         <!--<div class="hint-error" ng-style="routeForm.irregulars.$invalid && routeForm.irregulars.$touched?{'color':'red'}:''" >Obligatorio, máx. 100 caracteres</div>-->
                         <!--</md-input-container>-->
 
-                        <md-input-container>
-                            <label>Unidades óptimas para el servicio</label>
-                            <input type="text" ng-model="route.private_route.service_units" name="service_units" required maxlength="100">
-                            <div class="hint-error" ng-style="routeForm.service_units.$invalid && routeForm.service_units.$touched?{'color':'red'}:''">Obligatorio, máx. 100 caracteres</div>
-                        </md-input-container>
+
                         <md-checkbox class="md-primary" ng-model="route.private_route.irregulars" ng-init="route.private_route.irregulars = 'no'" ng-true-value="'si'" ng-false-value="'no'" style="margin-left: 0">Irregulares</md-checkbox>
 
                         <!--<md-input-container>-->
@@ -285,51 +282,56 @@
 
             <md-input-container style="width: 300px">
                 <label>Antigüedad del Vehículo Permitida</label>
-                <input type="number" min="0" ng-model="route.vehicle_antiquity" name="antiquity" required maxlength="3">
-                <div class="hint-error" ng-show="!routeForm.antiquity.$error.min" ng-style="routeForm.antiquity.$invalid && routeForm.antiquity.$touched?{'color':'red'}:''">Obligatorio, número máx. 3 dígitos</div>
+                <input type="number" min="0" ng-model="route.vehicle_antiquity" name="antiquity" maxlength="3">
+                <div class="hint-error" ng-show="!routeForm.antiquity.$error.min" ng-style="routeForm.antiquity.$invalid && routeForm.antiquity.$touched?{'color':'red'}:''">Opcional, número máx. 3 dígitos</div>
                 <div class="hint-error" style="color:red" ng-show="routeForm.antiquity.$error.min">Por favor, seleccione un valor mayor o igual que 0.</div>
             </md-input-container>
+
+            <md-input-container ng-if="routeTypeEquals('private')">
+                <label>Unidades óptimas para el servicio</label>
+                <input type="text" ng-model="route.private_route.service_units" name="service_units" maxlength="100">
+                <div class="hint-error" ng-style="routeForm.service_units.$invalid && routeForm.service_units.$touched?{'color':'red'}:''">Opcional, máx. 100 caracteres</div>
+            </md-input-container>
         </md-card>
-        <label ng-if="routeTypeEquals('route')" class="card-header">ASIGNAR RUTA Y PARADAS</label>
-        <label ng-if="!routeTypeEquals('route')" class="card-header">MAPAS</label>
+        <label  class="card-header">MAPAS</label>
         <md-card>
             <md-button ng-if="routeTypeEquals('route')" ng-click="addPolyline()" style="width: 200px" class="md-raised md-primary">Asignar Ruta</md-button>
             <md-button ng-if="!routeTypeEquals('route')" ng-click="addLoc()" style="width: 200px" class="md-raised md-primary">Asignar ubicación</md-button>
             <md-input-container>
                 <label>Hipervínculo Google Maps</label>
                 <input type="text" ng-model="route.link" name="link" required readonly>
-                <div class="hint-error" ng-style="routeForm.link.$invalid && routeForm.link.$touched?{'color':'red'}:''">Obligatorio, máx. 500 caracteres.</div>
+                <div class="hint-error" ng-style="routeForm.link.$invalid && routeForm.link.$touched?{'color':'red'}:''">Obligatorio.</div>
             </md-input-container>
             <md-input-container>
                 <label>Dimensionamiento</label>
-                <input type="text" ng-model="route.sizing" name="sizing" required maxlength="150">
-                <div class="hint-error" ng-style="routeForm.sizing.$invalid && routeForm.sizing.$touched?{'color':'red'}:''">Obligatorio, máx. 150 caracteres</div>
+                <input type="text" ng-model="route.sizing" name="sizing" required maxlength="50">
+                <div class="hint-error" ng-style="routeForm.sizing.$invalid && routeForm.sizing.$touched?{'color':'red'}:''">Obligatorio, máx. 50 caracteres</div>
             </md-input-container>
         </md-card>
-        <label class="card-header">TIEMPOS</label>
+        <label class="card-header">HORARIO</label>
         <md-card>
             <div layout="row">
                 <md-input-container style="width: 200px">
                     <label>Inicio</label>
-                    <input type="text" ng-model="route.schedule_start" pattern="([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]" name="schedule_start" required maxlength="5">
-                    <div class="hint-error" ng-style="routeForm.schedule_start.$invalid && routeForm.schedule_start.$touched?{'color':'red'}:''">Obligatorio, Formato 24 horas HH:MM</div>
+                    <input type="text" ng-model="route.schedule_start" pattern="([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]" name="schedule_start"  maxlength="5">
+                    <div class="hint-error" ng-style="routeForm.schedule_start.$invalid && routeForm.schedule_start.$touched?{'color':'red'}:''">Opcional, Formato 24 horas HH:MM</div>
                 </md-input-container>
                 <md-input-container style="width: 200px" flex-offset="5">
                     <label>Fin</label>
-                    <input type="text" ng-model="route.schedule_end" pattern="([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]" name="schedule_end" required maxlength="5">
-                    <div class="hint-error" ng-style="routeForm.schedule_end.$invalid && routeForm.schedule_end.$touched?{'color':'red'}:''">Obligatorio, Formato 24 horas HH:MM</div>
+                    <input type="text" ng-model="route.schedule_end" pattern="([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]" name="schedule_end"  maxlength="5">
+                    <div class="hint-error" ng-style="routeForm.schedule_end.$invalid && routeForm.schedule_end.$touched?{'color':'red'}:''">Opcional, Formato 24 horas HH:MM</div>
                 </md-input-container>
             </div>
             <md-input-container style="width: 200px" ng-if="routeTypeEquals('route')">
                 <label>Frecuencia</label>
-                <input type="text" ng-model="route.concession_route.frequency" required maxlength="100" name="frequency">
-                <div class="hint-error" ng-style="routeForm.frequency.$invalid && routeForm.frequency.$touched?{'color':'red'}:''">Obligatorio, máx. 100 caracteres</div>
+                <input type="text" ng-model="route.concession_route.frequency" maxlength="100" name="frequency">
+                <div class="hint-error" ng-style="routeForm.frequency.$invalid && routeForm.frequency.$touched?{'color':'red'}:''">Opcional, máx. 100 caracteres</div>
             </md-input-container>
 
             <md-input-container style="width: 200px" ng-if="routeTypeEquals('site')">
                 <label>Frecuencia</label>
-                <input type="text" ng-model="route.site.frequency" required maxlength="100" name="frequency">
-                <div class="hint-error" ng-style="routeForm.frequency.$invalid && routeForm.frequency.$touched?{'color':'red'}:''">Obligatorio, máx. 100 caracteres</div>
+                <input type="text" ng-model="route.site.frequency" maxlength="100" name="frequency">
+                <div class="hint-error" ng-style="routeForm.frequency.$invalid && routeForm.frequency.$touched?{'color':'red'}:''">Opcional, máx. 100 caracteres</div>
             </md-input-container>
         </md-card>
         <label class="card-header">TARIFAS</label>
@@ -342,20 +344,20 @@
                 <div class="hint-error" ng-show="!routeForm.min_rate.$error.min" ng-style="routeForm.min_rate.$invalid && routeForm.min_rate.$touched?{'color':'red'}:''">Obligatorio, número máx. 10 dígitos</div>
                 <div class="hint-error" style="color:red" ng-show="routeForm.min_rate.$error.min">Por favor, seleccione un valor mayor o igual que 0.</div>
                 <!--<div ng-messages="routeForm.min_rate.$error" >-->
-                    <!--<div  ng-message="required">dsadadasd</div>-->
+                <!--<div  ng-message="required">dsadadasd</div>-->
                 <!--</div>-->
             </md-input-container>
             <md-input-container ng-if="routeTypeEquals('route')">
                 <label>Tarifa Máxima</label>
                 <input type="number" min="0" step="any" ng-model="route.concession_route.max_rate" name="max_rate" maxlength="10" required>
-                <div class="hint-error" ng-show="!routeForm.max_rate.$error.min"ng-style="routeForm.max_rate.$invalid && routeForm.max_rate.$touched?{'color':'red'}:''">Obligatorio, número máx. 10 dígitos</div>
+                <div class="hint-error" ng-show="!routeForm.max_rate.$error.min" ng-style="routeForm.max_rate.$invalid && routeForm.max_rate.$touched?{'color':'red'}:''">Obligatorio, número máx. 10 dígitos</div>
                 <div class="hint-error" style="color:red" ng-show="routeForm.max_rate.$error.min">Por favor, seleccione un valor mayor o igual que 0.</div>
             </md-input-container>
 
 
             <md-input-container ng-if="routeTypeEquals('private')">
                 <label>Tarifa</label>
-                <input type="number" step="any" ng-model="route.private_route.rate" name="rate" maxlength="10" required>
+                <input type="number" step="any" ng-model="route.private_route.rate" name="rate" maxlength="10" min="0" required>
                 <div class="hint-error" ng-show="!routeForm.rate.$error.min" ng-style="routeForm.rate.$invalid && routeForm.rate.$touched?{'color':'red'}:''">Obligatorio, número máx. 10 dígitos</div>
                 <div class="hint-error" style="color:red" ng-show="routeForm.rate.$error.min">Por favor, seleccione un valor mayor o igual que 0.</div>
             </md-input-container>
@@ -376,14 +378,21 @@
 
 
         </md-card>
-        <label class="card-header">IMAGEN CORPORATIVA</label>
+        <label class="card-header" ng-if="!routeTypeEquals('site')">IMAGEN CORPORATIVA</label>
+        <label class="card-header" ng-if="routeTypeEquals('site')">IMAGEN CROMÁTICA</label>
         <md-card>
             <div layout="row">
                 <input style="display: none" id="file" type="file">
-                <md-button style="width: 200px;height: 30px" ng-click="selectFile()" ng-init="route.image = ''" class="md-raised md-primary">Examinar</md-button>
+                <div layout="column">
+                    <md-button style="width: 200px;height: 30px" ng-click="selectFile()" ng-init="route.image = ''" class="md-raised md-primary">Examinar</md-button>
+                    <br>
+                    <br>
+                    <md-button style="width: 200px;height: 30px;color: red" ng-click="clearImg()" class="md-raised">Borrar</md-button>
+                </div>
                 <span flex></span>
                 <img id="preview" style="width:200px; height:200px"/>
             </div>
+
         </md-card>
         <label class="card-header">OTROS</label>
         <md-card>
