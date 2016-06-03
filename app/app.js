@@ -62,26 +62,26 @@ angular.module('myApp', [
     };
 
 
-    $interval(function()
-    {
-        if(localStorage.getItem('username'))
-        {
-            $.post(webtransporte + '/admin/heartbeat', {
-                public_key: localStorage.getItem('public_key')
-            }, function(response)
-            {
-                if(response.response_code != 200)
-                {
-                    $rootScope.exit();
-                }
-
-            }, 'json').fail(function(error)
-            {
-                if(error.status == 401)
-                    $rootScope.exit();
-            });
-        }
-    }, 10000);
+    // $interval(function()
+    // {
+    //     if(localStorage.getItem('username'))
+    //     {
+    //         $.post(webtransporte + '/admin/heartbeat', {
+    //             public_key: localStorage.getItem('public_key')
+    //         }, function(response)
+    //         {
+    //             if(response.response_code != 200)
+    //             {
+    //                 $rootScope.exit();
+    //             }
+    //
+    //         }, 'json').fail(function(error)
+    //         {
+    //             if(error.status == 401)
+    //                 $rootScope.exit();
+    //         });
+    //     }
+    // }, 10000);
 
 
 }).config(function($mdThemingProvider)

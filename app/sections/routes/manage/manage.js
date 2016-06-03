@@ -9,7 +9,6 @@ angular.module('myApp.manage', ['ngRoute']).config([
 ]).controller('manageCtrl', function($scope, $routeParams, $mdDialog, $location)
 {
     $scope.route = {};
-    
 
 
     switch($routeParams.type)
@@ -126,7 +125,22 @@ angular.module('myApp.manage', ['ngRoute']).config([
             var reader = new FileReader();
             reader.onloadend = function()
             {
-                callback(reader.result);
+                var image = new Image();
+                image.onload = function()
+                {
+
+                    var canvas = document.createElement('canvas');
+
+                    var width = image.width;
+                    var height = image.height;
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+
+                    callback(canvas.toDataURL('image/jpeg'));
+                };
+                image.src = reader.result;
             };
             reader.readAsDataURL(xhr.response);
         };
@@ -325,10 +339,17 @@ angular.module('myApp.manage', ['ngRoute']).config([
                 {
                     $('#preview').attr('src', e.target.result);
 
-                    $scope.route.image = e.target.result;
                     $scope.$digest();
 
+                    resize(e.target.result,1280,720,function(img)
+                    {
+                        $scope.route.image = img;
+                    });
 
+                    resize(e.target.result,320,240,function(img)
+                    {
+                        $scope.route.imageLowRes = img;
+                    });
                 };
 
                 reader.readAsDataURL(this.files[0]);
@@ -336,10 +357,50 @@ angular.module('myApp.manage', ['ngRoute']).config([
         });
     };
 
+
+    function resize(img,maxWidth,maxHeight,onResized)
+    {
+        var image = new Image();
+        image.onload = function()
+        {
+
+            var canvas = document.createElement('canvas');
+
+            var width = image.width;
+            var height = image.height;
+
+
+            if(width > maxWidth)
+            {
+                if(width > maxWidth)
+                {
+                    height *= maxWidth / width;
+                    width = maxWidth;
+                }
+            } else
+            {
+                if(height > maxHeight)
+                {
+                    width *= maxHeight / height;
+                    height = maxHeight;
+                }
+            }
+
+
+            canvas.width = width;
+            canvas.height = height;
+            canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+
+            onResized(canvas.toDataURL('image/jpeg'));
+        };
+        image.src = img;
+    }
+
     $scope.clearImg = function()
     {
         $scope.route.image = "";
-        $('#preview').attr('src','');
+        $scope.route.imageLowRes = "";
+        $('#preview').attr('src', '');
     };
 
 
@@ -451,7 +512,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
         return result;
     };
 
-    
+
     $scope.getErrorMessage = function(message)
     {
         if(message instanceof Object)
