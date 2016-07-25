@@ -36,8 +36,8 @@
                 <div layout="column" flex="45">
                     <md-input-container>
                         <label>Nombre</label>
-                        <input type="text" name="name" ng-model="route.name" required maxlength="20">
-                        <div class="hint-error" ng-style="routeForm.name.$invalid && routeForm.name.$touched?{'color':'red'}:''">Obligatorio, máx. 20 caracteres</div>
+                        <input type="text" name="name" ng-model="route.name" required maxlength="10000">
+                        <div class="hint-error" ng-style="routeForm.name.$invalid && routeForm.name.$touched?{'color':'red'}:''">Obligatorio, máx. 10,000 caracteres</div>
                     </md-input-container>
                     <md-input-container >
                         <label>Clave mnemotécnica</label>
@@ -79,11 +79,18 @@
                     </md-input-container>
                 </div>
             </div>
-            <div layout="row">
+            <div layout="row" ng-if="routeTypeEquals('route')">
                 <md-input-container style="width: 100%">
                     <label>Itinerario</label>
-                    <textarea rows="5" type="text" name="itinerary" ng-model="route.itinerary" required maxlength="400" md-maxlength="400"></textarea>
-                    <div class="hint-error" ng-style="routeForm.itinerary.$invalid && routeForm.itinerary.$touched?{'color':'red'}:''">Obligatorio, máx. 400 caracteres</div>
+                    <textarea rows="5" type="text" name="itinerary" ng-model="route.itinerary" required maxlength="10000" md-maxlength="1000"></textarea>
+                    <div class="hint-error" ng-style="routeForm.itinerary.$invalid && routeForm.itinerary.$touched?{'color':'red'}:''">Obligatorio, máx. 10,000 caracteres</div>
+                </md-input-container>
+            </div>
+            <div layout="row" ng-if="!routeTypeEquals('route')">
+                <md-input-container style="width: 100%">
+                    <label>Itinerario</label>
+                    <textarea rows="5" type="text" name="itinerary" ng-model="route.itinerary" maxlength="1000" md-maxlength="1000"></textarea>
+                    <div class="hint-error" ng-style="routeForm.itinerary.$invalid && routeForm.itinerary.$touched?{'color':'red'}:''">Opcional, máx. 1000 caracteres</div>
                 </md-input-container>
             </div>
 
@@ -257,22 +264,22 @@
             <md-input-container style="width: 200px">
                 <label>Tipo de Vehículo</label>
                 <md-select ng-model="vehicleKey" name="vehicleId" required ng-change="route.vehicle_typeId = vehicleKey.split('-')[0]; route.vehicle_classId = vehicleKey.split('-')[1]">
-                    <md-optgroup label="Clase 1">
+                    <md-optgroup label="AUTOMÓVILES">
                         <md-option ng-repeat="(key,vehicle) in filterVehicles(vehicles,1)" ng-value="key">{{vehicle.name}}</md-option>
                     </md-optgroup>
-                    <md-optgroup label="Clase 2">
+                    <md-optgroup label="CAMIÓN">
                         <md-option ng-repeat="(key,vehicle) in filterVehicles(vehicles,2)" ng-value="key">{{vehicle.name}}</md-option>
                     </md-optgroup>
-                    <md-optgroup label="Clase 3">
+                    <md-optgroup label="REMOLQUE Y SEMIREMOLQUE">
                         <md-option ng-repeat="(key,vehicle) in filterVehicles(vehicles,3)" ng-value="key">{{vehicle.name}}</md-option>
                     </md-optgroup>
-                    <md-optgroup label="Clase 4">
+                    <md-optgroup label="DIVERSOS">
                         <md-option ng-repeat="(key,vehicle) in filterVehicles(vehicles,4)" ng-value="key">{{vehicle.name}}</md-option>
                     </md-optgroup>
-                    <md-optgroup label="Clase 5">
+                    <md-optgroup label="MOTOCICLETA">
                         <md-option ng-repeat="(key,vehicle) in filterVehicles(vehicles,5)" ng-value="key">{{vehicle.name}}</md-option>
                     </md-optgroup>
-                    <md-optgroup label="Clase 6">
+                    <md-optgroup label="OMNIBUS">
                         <md-option ng-repeat="(key,vehicle) in filterVehicles(vehicles,6)" ng-value="key">{{vehicle.name}}</md-option>
                     </md-optgroup>
                 </md-select>

@@ -31,6 +31,11 @@ angular.module('myApp.routes', ['ngRoute']).config([
 
     function getRoutes()
     {
+        $mdDialog.show({
+            controller: 'loadingCtrl',
+            templateUrl: 'loading/loading.html',
+            locals:{title:"Cargando..."}
+        });
         $.post(webtransporte + '/admin/get/routes',
             {
                 public_key: localStorage.getItem('public_key'),
@@ -38,6 +43,7 @@ angular.module('myApp.routes', ['ngRoute']).config([
             },
             function (response)
             {
+                $mdDialog.hide();
                 if (response.response_code == 200)
                 {
 
@@ -62,6 +68,7 @@ angular.module('myApp.routes', ['ngRoute']).config([
             }, 'json')
             .fail(function ()
             {
+                $mdDialog.hide();
                 $scope.$apply(function ()
                 {
                     $mdDialog.show(

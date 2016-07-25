@@ -75,10 +75,10 @@
             <td ><a style="text-overflow: ellipsis; width: 150px;display: inline-block; white-space: nowrap;overflow: hidden" href="{{route.link}}" target="_blank">{{route.link}}</a></td>
             <td ng-if="routeType == 'route'">{{getTypeString(route.concession_route.route_typeId)}}</td>
             <td>
-                <md-checkbox ng-disabled="getUserLevel() < 20" ng-model="check" ng-init="check = route.enabled" ng-change="enableRoute(route.key,check)" class="md-primary"></md-checkbox>
+                <md-checkbox aria-label="enable" ng-disabled="getUserLevel() < 20" ng-model="check" ng-init="check = route.enabled" ng-change="enableRoute(route.key,check)" class="md-primary"></md-checkbox>
             </td>
             <td >
-                <md-button ng-disabled="getUserLevel() < 20" style="min-width: 0" ng-click="go('/manage/'+routeType+'/'+route.key)">
+                <md-button aria-label="edit" ng-disabled="getUserLevel() < 20" style="min-width: 0" ng-click="go('/manage/'+routeType+'/'+route.key)">
                     <md-icon md-svg-src="resources/icons/ic_edit.svg" style="color:#27A340" ></md-icon>
                 </md-button>
             </td>

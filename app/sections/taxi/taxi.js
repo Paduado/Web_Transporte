@@ -63,7 +63,7 @@ angular.module('myApp.taxi', ['ngRoute']).config([
                 if(rate != undefined)
                 {
                     $scope.cabRateID = rate.id;
-                    $scope.kms = rate.kms;
+                    $scope.kms = parseFloat(rate.kms);
                     $scope.rate = parseFloat(rate.rate);
                     $scope.isNew = false;
                     $scope.isDefault = $scope.kms === 0;

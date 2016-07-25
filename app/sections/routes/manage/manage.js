@@ -45,6 +45,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
                 if(response.response_code == 200)
                 {
                     $scope.route = response.route;
+                    $scope.route.vehicle_antiquity = parseInt(response.route.vehicle_antiquity);
                     $scope.vehicleKey = $scope.route.vehicle_typeId + "-" + $scope.route.vehicle_classId;
                     $('#preview').attr('src', $scope.route.image);
                     $scope.$digest();
@@ -159,6 +160,13 @@ angular.module('myApp.manage', ['ngRoute']).config([
         {
             if($scope.route.type == 2)
                 $scope.route.concession_route.route_typeId = parseInt($scope.route.concession_route.route_typeId);
+
+
+            $mdDialog.show({
+                controller: 'loadingCtrl',
+                templateUrl: 'loading/loading.html',
+                locals:{title:"Guardando..."}
+            });
             $.post(webtransporte + '/admin/new/route',
                 {
                     public_key: localStorage.getItem('public_key'),
@@ -175,8 +183,11 @@ angular.module('myApp.manage', ['ngRoute']).config([
                                 .title($scope.route.type == 2 ? 'Ruta Agregada' : $scope.route.type == 1 ? 'Sitio Agregado' : 'Privado Agregado')
                                 .ariaLabel('Dialog route added')
                                 .ok('Aceptar')
-                            );
-                            $location.path('/routes/' + $scope.route.type);
+                            ).then(function()
+                            {
+                                $location.path('/routes/' + $scope.route.type);
+                            });
+
                         });
                     }
                     else if(response.response_code == 400)
@@ -199,7 +210,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
                                 .clickOutsideToClose(true)
                                 .title('Error al guardar')
                                 .ariaLabel('Alguno de los parámetros es inválido')
-                                .textContent('Alguno de los parámetros es inválido')
+                                .textContent(response.response_message)
                                 .ok('Aceptar')
                             );
                         });
@@ -214,7 +225,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
                         .clickOutsideToClose(true)
                         .title('Error al guardar')
                         .ariaLabel('Alguno de los parámetros es inválido')
-                        .textContent('Alguno de los parámetros es inválido')
+                        .textContent('Error en el servidor')
                         .ok('Aceptar')
                     );
                 });
@@ -226,6 +237,13 @@ angular.module('myApp.manage', ['ngRoute']).config([
 
             if($scope.route.type == 2)
                 $scope.route.concession_route.route_typeId = parseInt($scope.route.concession_route.route_typeId);
+
+
+            $mdDialog.show({
+                controller: 'loadingCtrl',
+                templateUrl: 'loading/loading.html',
+                locals:{title:"Guardando..."}
+            });
             $.post(webtransporte + '/admin/update/route',
                 {
                     public_key: localStorage.getItem('public_key'),
@@ -244,8 +262,11 @@ angular.module('myApp.manage', ['ngRoute']).config([
                                 .title($scope.route.type == 2 ? 'Ruta Guardada' : $scope.route.type == 1 ? 'Sitio Guardado' : 'Privado Guardado')
                                 .ariaLabel('Dialog route added')
                                 .ok('Aceptar')
-                            );
-                            $location.path('/routes/' + $scope.route.type);
+                            ).then(function()
+                            {
+                                $location.path('/routes/' + $scope.route.type);
+                            });
+
                         });
                     }
                     else if(response.response_code == 400)
@@ -268,7 +289,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
                                 .clickOutsideToClose(true)
                                 .title('Error al guardar')
                                 .ariaLabel('Alguno de los parámetros es inválido')
-                                .textContent('Alguno de los parámetros es inválido')
+                                .textContent(response.response_message)
                                 .ok('Aceptar')
                             );
                         });
@@ -283,7 +304,7 @@ angular.module('myApp.manage', ['ngRoute']).config([
                         .clickOutsideToClose(true)
                         .title('Error al guardar')
                         .ariaLabel('Alguno de los parámetros es inválido')
-                        .textContent('Alguno de los parámetros es inválido')
+                        .textContent('Error en el servidor')
                         .ok('Aceptar')
                     );
                 });
@@ -495,7 +516,8 @@ angular.module('myApp.manage', ['ngRoute']).config([
 
     $scope.isFormValid = function()
     {
-        return $scope.routeForm.$valid;
+        return $scope.routeForm.$valid
+        && $scope.route.type == 2?($scope.route.concession_route.ground != undefined && $scope.route.concession_route.ground != "" &&  $scope.route.concession_route.road != undefined && $scope.route.concession_route.road != ""):true;
     };
 
 

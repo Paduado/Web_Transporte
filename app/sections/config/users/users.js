@@ -261,12 +261,12 @@ angular.module('myApp.users', ['ngRoute']).config([
     {
         switch(level)
         {
-            case 10:
+            case "10":
                 return "Lectura";
-            case 20:
+            case "20":
                 return "Escritura";
-            case 30:
-                return "Super Admin";
+            case "30":
+                return "Súper Admin";
         }
     };
 

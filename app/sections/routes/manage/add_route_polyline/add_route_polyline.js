@@ -1,22 +1,24 @@
 'use strict';
 
 angular.module('myApp.add_route_polyline', ['ngRoute']).config([
-    '$routeProvider', function ($routeProvider)
+    '$routeProvider', function($routeProvider)
     {
         $routeProvider.when('/add_route_polyline', {
             templateUrl: 'sections/routes/manage/add_route_polyline/add_route_polyline.html',
             controller: 'add_route_polylineCtrl'
         });
     }
-]).controller('add_route_polylineCtrl', function ($scope, $mdDialog, data)
+]).controller('add_route_polylineCtrl', function($scope, $mdDialog, data)
 {
 
-    $scope.cancel = function ()
+    $scope.cancel = function()
     {
         $mdDialog.cancel();
     };
-    setTimeout(function ()
+    setTimeout(function()
     {
+
+        /** Init Variables **/
 
         var mapDiv = document.getElementById('add-route-map');
         var map = new google.maps.Map(mapDiv, {
@@ -33,128 +35,287 @@ angular.module('myApp.add_route_polyline', ['ngRoute']).config([
 
 
         var markers = [];
-        var cordinates = [];
 
         var poly = new google.maps.Polyline({
-            path: cordinates,
+            path: [],
             strokeColor: '#FF0000',
             strokeOpacity: 1.0,
             strokeWeight: 2,
             editable: true,
+            suppressUndo: true,
             map: map
         });
 
 
-        map.addListener('click', function (e)
-        {
-            poly.getPath().push(e.latLng);
-        });
+        /** Map ready event **/
 
-        google.maps.event.addListenerOnce(map, 'idle', function ()
+
+        google.maps.event.addListenerOnce(map, 'idle', function()
         {
-            if (data.route.polyline != "")
+            if(data.route.polyline != "")
             {
                 var path = google.maps.geometry.encoding.decodePath(data.route.polyline);
-                for (var i = 0; i < path.length; i++)
+                path.forEach(function(p)
                 {
-                    poly.getPath().push(path[i]);
-                    var stops = data.route.stops;
-                    for (var j = 0; j < stops.length; j++)
+                    poly.getPath().push(p)
+                });
+                // poly.setPath(path);
+                var stops = data.route.stops;
+                var painted = 0;
+                for(var i = 0; i < stops.length; i++)
+                {
+                    if(stops[i].lat != undefined)
+                    {
+                        var stopData = getStopData(stops[i]);
+                        var latLng = stopData.latLng;
+                        var index = stopData.index;
+                    }
+
+                    else
+                    {
+                        var latLng = path[stops[i].index];
+                        var index = stops[i].index;
+                    }
+
+
+                    if(latLng)
                     {
 
-                        if (Math.round(path[i].lat() * 100000) / 100000 == Math.round(stops[j].lat * 100000) / 100000 && Math.round(path[i].lng() * 100000) / 100000 == Math.round(stops[j].lng * 100000) / 100000)
-                        {
-                            markers[i].isStop = true;
-                            markers[i].stopName = stops[j].name;
-                            markers[i].setIcon(getIcon(true));
-                        }
+                        var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            isStop: true,
+                            stopName: stops[i].name,
+                            icon: 'resources/icons/ic_edit_location.svg',
+                            index: index
+                        });
+                        markers.push(marker);
+
+                        painted++;
                     }
+                    else console.log('failed at: ' + i);
                 }
+
+                console.log('painted: ' + painted + ' of: ' + stops.length);
+
                 zoomToObject(poly);
             }
         });
 
-        google.maps.event.addListener(poly, 'click', function (e)
+
+        function getStopData(stop)
         {
-            if (e.edge != null)
+            var path = poly.getPath();
+            var tolerance = .00005;
+            while(1)
             {
-                poly.getPath().insertAt(e.edge + 1, e.latLng);
+                loop:
+                for(var i = 0; i < path.length; i++)
+                {
+                    var latDiff = Math.abs(path.getAt(i).lat() - stop.lat);
+                    var lngDiff = Math.abs(path.getAt(i).lng() - stop.lng);
+
+                    if(latDiff <= tolerance && lngDiff <= tolerance)
+                    {
+                        for(var j = 0; j < markers.length; j++)
+                        {
+                            if(markers[j].index == i)
+                            {
+                                continue loop;
+                            }
+                        }
+
+
+                        return {latLng: path.getAt(i), index: i};
+                    }
+                }
+                tolerance *= 2;
             }
+        }
+
+
+        /** Map listeners **/
+
+
+
+        map.addListener('click', function(e)
+        {
+            poly.getPath().push(e.latLng);
         });
-        google.maps.event.addListener(poly, 'mousedown', function (e)
+
+
+        // google.maps.event.addListener(poly, 'click', function (e)
+        // {
+        //     if (e.edge != null)
+        //     {
+        //         poly.getPath().insertAt(e.edge + 1, e.latLng);
+        //     }
+        // });
+
+        google.maps.event.addListener(poly, 'rightclick', function(e)
         {
-            if (e.vertex != null)
+            if(e.vertex != null)
             {
-                poly.setEditable(false);
-                poly.setEditable(true);
+                poly.getPath().removeAt(e.vertex);
             }
+
         });
-
-        google.maps.event.addListener(poly.getPath(), 'insert_at', function (index)
+        google.maps.event.addListener(poly, 'click', function(e)
         {
-            var marker = new google.maps.Marker({
-                position: poly.getPath().getAt(index),
-                map: map,
-                draggable: true,
-                isStop: false,
-                stopName: ""
-            });
-            marker.setIcon(getIcon(marker.isStop));
+            // if (e.vertex != null)
+            // {
+            //     poly.setEditable(false);
+            //     poly.setEditable(true);
+            // }
 
-            markers.splice(index, 0, marker);
-
-            var markersCnt = markers.length;
-            for (var i = index; i < markersCnt; i++)
-            {
-                markers[i].m_id = i;
-            }
-
-            google.maps.event.addListener(marker, 'rightclick', function (e)
-            {
-                poly.getPath().removeAt(marker.m_id);
-            });
-
-            google.maps.event.addListener(marker, 'drag', function (e)
-            {
-                poly.getPath().setAt(marker.m_id, e.latLng);
-            });
-
-            google.maps.event.addListener(marker, 'click', function (e)
+            if(e.vertex != null)
             {
                 $('#info_container').css('max-width', '230px');
                 $('#map-cover').show();
-                $scope.markerId = marker.m_id;
-                $scope.stopName = marker.stopName;
-                $scope.isStop = marker.isStop;
+
+                var isStop = false;
+                var stopName = "";
+                for(var i = 0; i < markers.length; i++)
+                {
+                    if(markers[i].index == e.vertex)
+                    {
+                        isStop = true;
+                        stopName = markers[i].stopName;
+                        break;
+                    }
+                }
+
+
+                $scope.stopName = stopName;
+                $scope.isStop = isStop;
                 $scope.$digest();
 
-                $scope.acceptInfo = function ()
+                $scope.acceptInfo = function()
                 {
-                    for (var i = 0; i < markers.length; i++)
+                    if($scope.isStop && isStop)
                     {
-                        if ($scope.markerId == markers[i].m_id)
-                        {
-                            markers[i].isStop = $scope.isStop;
-                            markers[i].stopName = $scope.isStop ? $scope.stopName : "";
-                            markers[i].setIcon(getIcon(marker.isStop));
-                        }
+                        markers[i].stopName = $scope.stopName;
                     }
+                    else if($scope.isStop && !isStop)
+                    {
+                        var marker = new google.maps.Marker({
+                            position: e.latLng,
+                            map: map,
+                            isStop: true,
+                            stopName: $scope.stopName,
+                            icon: 'resources/icons/ic_edit_location.svg',
+                            index: e.vertex
+                        });
+                        markers.push(marker);
+                    }
+                    else if(!$scope.isStop && isStop)
+                    {
+                        markers[i].setMap(null);
+
+                        markers.splice(i, 1);
+                    }
+                    // for (var i = 0; i < markers.length; i++)
+                    // {
+                    //     if ($scope.markerId == markers[i].m_id)
+                    //     {
+                    //         markers[i].isStop = $scope.isStop;
+                    //         markers[i].stopName = $scope.isStop ? $scope.stopName : "";
+                    //         markers[i].setIcon(getIcon(marker.isStop));
+                    //     }
+                    // }
                     $scope.cancelInfo();
                 };
+            }
 
-
-            });
 
         });
 
-        google.maps.event.addListener(poly.getPath(), 'remove_at', function (index)
+
+        // google.maps.event.addListener(poly.getPath(), 'insert_at', function (index)
+        // {
+        // var marker = new google.maps.Marker({
+        //     position: poly.getPath().getAt(index),
+        //     map: map,
+        //     draggable: true,
+        //     isStop: false,
+        //     stopName: ""
+        // });
+        // marker.setIcon(getIcon(marker.isStop));
+        //
+        // markers.splice(index, 0, marker);
+        //
+        // var markersCnt = markers.length;
+        // for (var i = index; i < markersCnt; i++)
+        // {
+        //     markers[i].m_id = i;
+        // }
+
+        // google.maps.event.addListener(marker, 'rightclick', function (e)
+        // {
+        //     poly.getPath().removeAt(marker.m_id);
+        // });
+
+
+        // google.maps.event.addListener(marker, 'drag', function (e)
+        // {
+        //     poly.getPath().setAt(marker.m_id, e.latLng);
+        // });
+
+
+        // google.maps.event.addListener(marker, 'click', function (e)
+        // {
+        //     $('#info_container').css('max-width', '230px');
+        //     $('#map-cover').show();
+        //     $scope.markerId = marker.m_id;
+        //     $scope.stopName = marker.stopName;
+        //     $scope.isStop = marker.isStop;
+        //     $scope.$digest();
+        //
+        //     $scope.acceptInfo = function ()
+        //     {
+        //         for (var i = 0; i < markers.length; i++)
+        //         {
+        //             if ($scope.markerId == markers[i].m_id)
+        //             {
+        //                 markers[i].isStop = $scope.isStop;
+        //                 markers[i].stopName = $scope.isStop ? $scope.stopName : "";
+        //                 markers[i].setIcon(getIcon(marker.isStop));
+        //             }
+        //         }
+        //         $scope.cancelInfo();
+        //     };
+        //
+        //
+        // });
+
+        // });
+
+        google.maps.event.addListener(poly.getPath(), 'set_at', function(index)
         {
-            markers[index].setMap(null);
-            markers.splice(index, 1);
-            var markersCnt = markers.length;
-            for (var i = index; i < markersCnt; i++)
+            for(var i = 0; i < markers.length; i++)
             {
-                markers[i].m_id = i;
+                if(markers[i].index == index)
+                {
+                    markers[i].setPosition(poly.getPath().getAt(index));
+                    break;
+                }
+            }
+        });
+
+        google.maps.event.addListener(poly.getPath(), 'remove_at', function(index)
+        {
+            for(var i = 0; i < markers.length; i++)
+            {
+                if(markers[i].index == index)
+                {
+                    markers[i].setMap(null);
+                    markers.splice(i, 1);
+                    i--;
+                }
+                else if(markers[i].index > index)
+                {
+                    markers[i].index -= 1;
+                }
             }
         });
 
@@ -170,7 +331,7 @@ angular.module('myApp.add_route_polyline', ['ngRoute']).config([
         {
             var bounds = new google.maps.LatLngBounds();
             var points = obj.getPath().getArray();
-            for (var n = 0; n < points.length; n++)
+            for(var n = 0; n < points.length; n++)
             {
                 bounds.extend(points[n]);
             }
@@ -178,24 +339,20 @@ angular.module('myApp.add_route_polyline', ['ngRoute']).config([
         }
 
 
-        $scope.accept = function ()
+        $scope.accept = function()
         {
             var polyline = google.maps.geometry.encoding.encodePath(poly.getPath());
-            var lowResUrl =  "https://maps.googleapis.com/maps/api/staticmap?size=320x240&scale=1&path=color:0xFF0000FF|weight:2|enc:" + polyline;
-            var highResUrl = "https://maps.googleapis.com/maps/api/staticmap?size=640x360&scale=2&path=color:0xFF0000FF|weight:2|enc:"+ polyline;
+            var lowResUrl = "https://maps.googleapis.com/maps/api/staticmap?size=320x240&scale=1&path=color:0xFF0000FF|weight:2|enc:" + polyline;
+            var highResUrl = "https://maps.googleapis.com/maps/api/staticmap?size=640x360&scale=2&path=color:0xFF0000FF|weight:2|enc:" + polyline;
             var stops = [];
-            for (var i = 0; i < markers.length; i++)
+            for(var i = 0; i < markers.length; i++)
             {
-                if (markers[i].isStop)
+                if(markers[i].isStop)
                 {
-                    var stop = {
+                    stops.push({
                         name: markers[i].stopName,
-                        lat: markers[i].getPosition().lat(),
-                        lng: markers[i].getPosition().lng()
-                        //lat:Math.round(markers[i].getPosition().lat()*100000)/100000,
-                        //lng:Math.round(markers[i].getPosition().lng()*100000)/100000
-                    };
-                    stops.push(stop);
+                        index: markers[i].index
+                    });
                 }
             }
 
@@ -205,13 +362,13 @@ angular.module('myApp.add_route_polyline', ['ngRoute']).config([
                 lowResUrl: lowResUrl,
                 highResUrl: highResUrl
             };
-            
+
             $mdDialog.hide(data);
 
         };
     }, 1000);
 
-    $scope.cancelInfo = function ()
+    $scope.cancelInfo = function()
     {
         $('#info_container').css('max-width', '0');
         $('#map-cover').hide();

@@ -1,10 +1,9 @@
 'use strict';
-var webtransporte = "http://192.168.22.2:90/Servicios/PanelControl/index.php";
-//var webtransporte = "http://148.239.50.191:80";
+// var webtransporte = "http://201.131.124.211/Servicios/PanelControl/index.php";
+var webtransporte = "http://148.239.50.193/index.php";
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
     'ngRoute',
-    'myApp.login',
     'myApp.routes',
     'myApp.manage',
     'myApp.add_route_polyline',
@@ -12,13 +11,15 @@ angular.module('myApp', [
     'myApp.taxi',
     'myApp.users',
     'myApp.password',
+    'myApp.login',
     'myApp.notifications',
     'sidebarMenu',
     'ngMaterial',
     'encode',
     'about',
     'md.data.table',
-    'ngMessages'
+    'ngMessages',
+    'loading'
 ]).config(function($routeProvider)
     {
         $routeProvider.otherwise({redirectTo: '/routes/2'});
@@ -62,26 +63,26 @@ angular.module('myApp', [
     };
 
 
-    // $interval(function()
-    // {
-    //     if(localStorage.getItem('username'))
-    //     {
-    //         $.post(webtransporte + '/admin/heartbeat', {
-    //             public_key: localStorage.getItem('public_key')
-    //         }, function(response)
-    //         {
-    //             if(response.response_code != 200)
-    //             {
-    //                 $rootScope.exit();
-    //             }
-    //
-    //         }, 'json').fail(function(error)
-    //         {
-    //             if(error.status == 401)
-    //                 $rootScope.exit();
-    //         });
-    //     }
-    // }, 10000);
+    $interval(function()
+    {
+        if(localStorage.getItem('username'))
+        {
+            $.post(webtransporte + '/admin/heartbeat', {
+                public_key: localStorage.getItem('public_key')
+            }, function(response)
+            {
+                if(response.response_code != 200)
+                {
+                    $rootScope.exit();
+                }
+
+            }, 'json').fail(function(error)
+            {
+                if(error.status == 401)
+                    $rootScope.exit();
+            });
+        }
+    }, 10000);
 
 
 }).config(function($mdThemingProvider)
